@@ -18,6 +18,7 @@ int main()
 	Irondhul.setPosition(1160.0f, 550.0f);
 	sf::Texture IrondhulTextureLeft;
 	IrondhulTextureLeft.loadFromFile("left.png");
+
 	Irondhul.setTexture(&IrondhulTextureLeft);
 	sf::Texture IrondhulTextureRight;
 	IrondhulTextureRight.loadFromFile("right.png");
