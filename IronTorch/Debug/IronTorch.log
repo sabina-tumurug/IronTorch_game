@@ -1,4 +1,4 @@
-﻿  stdafx.cpp
-  IronTorch.cpp
-  IronTorch.vcxproj -> D:\work\uni\IP\IronTorch\Debug\IronTorch.exe
-  IronTorch.vcxproj -> D:\work\uni\IP\IronTorch\Debug\IronTorch.pdb (Full PDB)
+﻿  IronTorch.cpp
+  LINK : C:\Users\lenovo\Source\Repos\IronTorch_game\Debug\IronTorch.exe not found or not built by the last incremental link; performing full link
+  IronTorch.vcxproj -> C:\Users\lenovo\Source\Repos\IronTorch_game\Debug\IronTorch.exe
+  IronTorch.vcxproj -> C:\Users\lenovo\Source\Repos\IronTorch_game\Debug\IronTorch.pdb (Full PDB)
