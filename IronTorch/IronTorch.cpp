@@ -6,8 +6,6 @@
 #include <string>
 using namespace std;
 
-	
-
 int main()
 {
 	//Window properties
@@ -40,7 +38,10 @@ int main()
 	Irondhul.setTexture(&IrondhulTextureLeft);
 	sf::Texture IrondhulTextureRight;
 	IrondhulTextureRight.loadFromFile(IrondhulRightTexture_path);
-	
+	sf::CircleShape Circle(100.0f);
+	//sf::Color blue = sf::Color(0, 0, 255);
+	Circle.setFillColor(sf::Color::Blue);
+	//Circle.setPosition(1100.0f,500.0f);
 	while (window.isOpen())
 	{
 		sf::Event event;
@@ -70,12 +71,12 @@ int main()
 			sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))
 			Irondhul.move(0.0f, -0.1f);
 		///////////////////////////////////////////////////////
-		//hhhh
+
 
 		window.clear();
+		window.draw(Circle);
 		window.draw(Irondhul);
 		window.display();
-	
 	}
 
 	return 0;
