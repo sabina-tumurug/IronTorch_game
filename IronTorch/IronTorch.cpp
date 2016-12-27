@@ -21,12 +21,12 @@ int main()
 	string IrondhulRightTexture_path = "right.png";
 	
 	//Theme song
-	/*sf::Music music;
+	sf::Music music;
 	if (!music.openFromFile("theme_song.wav"))
 	return -1;
 	music.setLoop(true);
 	music.play();
-	music.setVolume(20);*/
+	music.setVolume(20);
 
 	sf::RenderWindow window(sf::VideoMode(windowWidth,windowHeight), "!!IronTorch!!");
 	
