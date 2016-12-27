@@ -88,7 +88,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>SFML_STATIC;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>D:\Proiect-Git\IronTorch_game\libs and resources\SFML-2.4.1\include;C:\Users\cristian.mihaita\Source\Repos\IronTorch_game\libs and resources\SFML-2.4.1\include;C:\Users\lenovo\Source\Repos\IronTorch_game\libs and resources\SFML-2.4.1\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Proiect-Git\IronTorch_game\libs and resources\SFML-2.4.1\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
