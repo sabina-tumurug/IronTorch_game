@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include "G_unit.h"
 #include <string>
 using namespace std;
 
@@ -11,6 +12,10 @@ int main()
 	//Window properties
 	int windowWidth = 1200;
 	int windowHeight = 600;
+
+	//Size of map objects
+	int objectWidth = 60;
+	int objectHeight = 60;
 	
 	//Irondhul (main character) graphic properties
 	float IrondhulWidth = 40;
@@ -38,10 +43,31 @@ int main()
 	Irondhul.setTexture(&IrondhulTextureLeft);
 	sf::Texture IrondhulTextureRight;
 	IrondhulTextureRight.loadFromFile(IrondhulRightTexture_path);
-	sf::CircleShape Circle(100.0f);
-	//sf::Color blue = sf::Color(0, 0, 255);
-	Circle.setFillColor(sf::Color::Blue);
-	//Circle.setPosition(1100.0f,500.0f);
+
+	//Map stuff...
+	G_Unit wall;
+	wall.Height = objectHeight;
+	wall.Width = objectWidth;
+	wall.IsBackground = false;
+	wall.Path = "wall.jpg";
+	
+	G_Unit floor;
+	floor.Height = objectHeight;
+	floor.Width = objectWidth;
+	floor.IsBackground = true;
+	floor.Path = "floor.jpg";
+
+	G_Unit mapMatrix[20][10];
+	for (int i = 0; i < windowWidth / objectWidth; i++)
+		for (int j = 0; j < windowHeight / objectHeight; j++)
+		{
+			mapMatrix[i][j] = wall;
+			mapMatrix[i][j].Position_x = i * objectWidth;
+			mapMatrix[i][j].Position_y = j * objectHeight;
+		}
+
+
+
 	while (window.isOpen())
 	{
 		sf::Event event;
@@ -74,7 +100,16 @@ int main()
 
 
 		window.clear();
-		window.draw(Circle);
+		for (int i = 0; i < windowWidth / objectWidth; i++)
+			for (int j = 0; j < windowHeight / objectHeight; j++)
+			{
+				sf::RectangleShape block (sf::Vector2f(objectWidth, objectHeight));
+				block.setPosition(sf::Vector2f(mapMatrix[i][j].Position_x, mapMatrix[i][j].Position_y));
+				sf::Texture blockTexture;
+				blockTexture.loadFromFile(mapMatrix[i][j].Path);
+				block.setTexture(&blockTexture);
+				window.draw(block);
+			}
 		window.draw(Irondhul);
 		window.display();
 	}
