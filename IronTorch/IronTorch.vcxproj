@@ -151,12 +151,16 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CharacterModel.h" />
     <ClInclude Include="G_Unit.h" />
+    <ClInclude Include="Potion.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CharacterModel.cpp" />
     <ClCompile Include="G_Unit.cpp" />
     <ClCompile Include="IronTorch.cpp" />
+    <ClCompile Include="Potion.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="left.png" />

@@ -24,12 +24,24 @@
     <ClInclude Include="G_Unit.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CharacterModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Potion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="IronTorch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="G_Unit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Potion.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
