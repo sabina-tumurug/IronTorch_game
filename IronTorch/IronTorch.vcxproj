@@ -153,10 +153,12 @@
   <ItemGroup>
     <ClInclude Include="G_Unit.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="TileMap.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="G_Unit.cpp" />
     <ClCompile Include="IronTorch.cpp" />
+    <ClCompile Include="TileMap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="left.png" />

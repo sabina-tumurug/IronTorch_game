@@ -1,10 +1,14 @@
-﻿  IronTorch.cpp
-d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(49): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(50): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(55): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(56): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(65): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(66): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(106): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+﻿  TileMap.cpp
+d:\proiect-git\irontorch_game\irontorch\tilemap.cpp(30): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+d:\proiect-git\irontorch_game\irontorch\tilemap.cpp(31): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+d:\proiect-git\irontorch_game\irontorch\tilemap.cpp(32): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+d:\proiect-git\irontorch_game\irontorch\tilemap.cpp(33): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+d:\proiect-git\irontorch_game\irontorch\tilemap.cpp(36): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+d:\proiect-git\irontorch_game\irontorch\tilemap.cpp(37): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+d:\proiect-git\irontorch_game\irontorch\tilemap.cpp(38): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+d:\proiect-git\irontorch_game\irontorch\tilemap.cpp(39): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+  IronTorch.cpp
+  G_Unit.cpp
+  Generating Code...
   IronTorch.vcxproj -> D:\Proiect-Git\IronTorch_game\Debug\IronTorch.exe
   IronTorch.vcxproj -> D:\Proiect-Git\IronTorch_game\Debug\IronTorch.pdb (Full PDB)
