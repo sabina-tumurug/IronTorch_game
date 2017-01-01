@@ -50,4 +50,15 @@
   <ItemGroup>
     <None Include="openal32.dll" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="right.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="left.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="openal32.dll" />
+  </ItemGroup>
 </Project>
