@@ -108,6 +108,61 @@ void CharacterModel::addPotion(Potion potion)
 
 }
 
+void CharacterModel::usePotion(int potionID)
+{
+	int resultPotionPosition = getPotionPositionByID(potionID);
+	if (resultPotionPosition < 0)
+	{
+		//throw error
+		return;
+	}
+	Potion resultPotion = potionList[resultPotionPosition];
+	removePotionAtPosition(resultPotionPosition);
+
+	incrStrenght(resultPotion.effectStrenght);
+	incrInteligence(resultPotion.effectInteligence);
+	incrAgility(resultPotion.effectAgility);
+	incrEndurance(resultPotion.effectEndurance);
+
+	hp += resultPotion.effectHP;
+}
+
+int CharacterModel::getPotionPositionByID(int potionID)
+{
+	int result = -1;
+	for (int i = 0; i < potionList_Size; i++)
+	{
+		if (potionList[i].id == potionID)
+		{
+			result = i;
+			break;
+		}
+	}
+	return result;
+}
+
+void CharacterModel::removePotionAtPosition(int potionPosition)
+{
+	for (int i = potionPosition; i < potionList_Size; i++)
+	{
+		potionList[i] = potionList[i + 1];
+	}
+	potionList_Size--;
+}
+
+float CharacterModel::combat_attack()
+{
+	//for now ... will modify considering the other attributes
+	return attack;
+}
+
+float CharacterModel::combat_defend(float attackPow)
+{
+	float dmg = defence - attack;
+
+	hp -= dmg;
+	return dmg; 
+}
 
 CharacterModel::~CharacterModel()
 {

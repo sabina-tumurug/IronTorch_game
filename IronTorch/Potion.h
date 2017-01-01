@@ -7,12 +7,11 @@ public:
 	int id;
 
 	int effectHP;
-	float effectAttack, effectDefence;
 	int effectStrenght, effectAgility, effectInteligence, effectEndurance;
 	
 	Potion();
 	Potion(std::string);
-	Potion(std::string, int, float,float,int,int,int,int);
+	Potion(std::string, int,int,int,int,int);
 	~Potion();
 };
 

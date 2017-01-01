@@ -16,6 +16,8 @@ private:
 	void incrInteligence(int);
 	void incrEndurance(int);
 
+	int getPotionPositionByID(int);
+	void removePotionAtPosition(int);
 public:
 	std::string name;
 	Potion potionList[100];
@@ -32,7 +34,8 @@ public:
 	void addPotion(Potion);
 	void usePotion(int);
 
-	float combat(int);
+	float combat_attack();
+	float combat_defend(float);
 	~CharacterModel();
 };
 
