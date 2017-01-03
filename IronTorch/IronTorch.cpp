@@ -3,22 +3,29 @@
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include "G_unit.h"
 #include <string>
+#include "TileMap.h"
 using namespace std;
 
 int main()
 {
-	//Window properties
+	//Window size
 	int windowWidth = 1200;
 	int windowHeight = 600;
-	
-	//Irondhul (main character) graphic properties
-	float IrondhulWidth = 40;
-	float IrondhulHeight = 60;
+	//Map tile size
+	int tileWidth = 60;
+	int tileHeight = 60;
+	//Character size
+	float characterWidth = 40;
+	float characterHeight = 60;
 
 	//Sprites
 	string IrondhulLeftTexture_path = "left.png";
 	string IrondhulRightTexture_path = "right.png";
+	string vampTexture_path = "vampire(left).png";
+	string zombieTexture_path = "zombie(right).png";
+	string bossTexture_path = "death.png";
 	
 	//Theme song
 	sf::Music music;
@@ -30,18 +37,50 @@ int main()
 
 	sf::RenderWindow window(sf::VideoMode(windowWidth,windowHeight), "!!IronTorch!!");
 	
-	//Irondhul's texture and position
-	sf::RectangleShape Irondhul(sf::Vector2f(IrondhulWidth, IrondhulHeight));
-	Irondhul.setPosition(1160.0f, 540.0f);
+	//Irondhul properties
+	sf::RectangleShape Irondhul(sf::Vector2f(characterWidth, characterHeight));
+	Irondhul.setPosition(windowWidth-characterWidth, windowHeight-characterHeight);
 	sf::Texture IrondhulTextureLeft;
 	IrondhulTextureLeft.loadFromFile(IrondhulLeftTexture_path);
 	Irondhul.setTexture(&IrondhulTextureLeft);
 	sf::Texture IrondhulTextureRight;
 	IrondhulTextureRight.loadFromFile(IrondhulRightTexture_path);
-	sf::CircleShape Circle(100.0f);
-	//sf::Color blue = sf::Color(0, 0, 255);
-	Circle.setFillColor(sf::Color::Blue);
-	//Circle.setPosition(1100.0f,500.0f);
+
+	//Enemies
+	sf::RectangleShape vampire(sf::Vector2f(characterWidth, characterHeight));
+	sf::Texture vampTexture;
+	vampTexture.loadFromFile(vampTexture_path);
+	vampire.setTexture(&vampTexture);
+
+	sf::RectangleShape zombie(sf::Vector2f(characterWidth, characterHeight));
+	sf::Texture zombieTexture;
+	zombieTexture.loadFromFile(zombieTexture_path);
+	zombie.setTexture(&zombieTexture);
+
+	sf::RectangleShape boss(sf::Vector2f(characterWidth, characterHeight));
+	sf::Texture bossTexture;
+	bossTexture.loadFromFile(bossTexture_path);
+	boss.setTexture(&bossTexture);
+
+	//Tile map
+	const int level[] =
+	{
+		3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+		1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+		1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1,
+		1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1,
+		1, 0, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 2, 1, 1, 1, 1, 0, 1,
+		1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1,
+		2, 0, 1, 1, 1, 1, 1, 2, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1,
+		3, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+		2, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+	};
+	TileMap map;
+	if (!map.load("tileset.png", sf::Vector2u(tileWidth, tileHeight), level, 20, 10))
+		return -1;
+	/////////////////////////////////////////////////////////////////////////////////
+
 	while (window.isOpen())
 	{
 		sf::Event event;
@@ -50,7 +89,6 @@ int main()
 			if (event.type == sf::Event::Closed)
 				window.close();
 		}
-
 		//Irondhul's movement
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) ||
 			sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
@@ -72,14 +110,17 @@ int main()
 			Irondhul.move(0.0f, -0.1f);
 		///////////////////////////////////////////////////////
 
-
 		window.clear();
-		window.draw(Circle);
+		window.draw(map);
+
+		//Testing if it is possible to draw the same shape multiple times in different positions
+		/*zombie.setPosition(sf::Vector2f(100.0f, 100.0f));
+		window.draw(zombie);
+		zombie.setPosition(sf::Vector2f(200.0f, 200.0f));
+		window.draw(zombie);*/
+
 		window.draw(Irondhul);
 		window.display();
 	}
-
 	return 0;
 }
-
-
