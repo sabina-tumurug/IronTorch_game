@@ -23,23 +23,23 @@ int main()
 	//Sprites
 	string IrondhulLeftTexture_path = "left.png";
 	string IrondhulRightTexture_path = "right.png";
-	string vampTexture_path = "vampire(left).png";
+	string vampireTexture_path = "vampire(left).png";
 	string zombieTexture_path = "zombie(right).png";
 	string bossTexture_path = "death.png";
-	
+
 	//Theme song
 	sf::Music music;
 	if (!music.openFromFile("theme_song.wav"))
-	return -1;
+		return -1;
 	music.setLoop(true);
 	music.play();
 	music.setVolume(20);
 
-	sf::RenderWindow window(sf::VideoMode(windowWidth,windowHeight), "!!IronTorch!!");
-	
+	sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), "!!IronTorch!!");
+
 	//Irondhul properties
 	sf::RectangleShape Irondhul(sf::Vector2f(characterWidth, characterHeight));
-	Irondhul.setPosition(windowWidth-characterWidth, windowHeight-characterHeight);
+	Irondhul.setPosition(windowWidth - characterWidth, windowHeight - characterHeight);
 	sf::Texture IrondhulTextureLeft;
 	IrondhulTextureLeft.loadFromFile(IrondhulLeftTexture_path);
 	Irondhul.setTexture(&IrondhulTextureLeft);
@@ -48,9 +48,9 @@ int main()
 
 	//Enemies
 	sf::RectangleShape vampire(sf::Vector2f(characterWidth, characterHeight));
-	sf::Texture vampTexture;
-	vampTexture.loadFromFile(vampTexture_path);
-	vampire.setTexture(&vampTexture);
+	sf::Texture vampireTexture;
+	vampireTexture.loadFromFile(vampireTexture_path);
+	vampire.setTexture(&vampireTexture);
 
 	sf::RectangleShape zombie(sf::Vector2f(characterWidth, characterHeight));
 	sf::Texture zombieTexture;
@@ -66,7 +66,7 @@ int main()
 	const int level[] =
 	{
 		3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+		1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 		1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
 		1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1,
 		1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1,
@@ -89,6 +89,7 @@ int main()
 			if (event.type == sf::Event::Closed)
 				window.close();
 		}
+
 		//Irondhul's movement
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) ||
 			sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
@@ -113,11 +114,23 @@ int main()
 		window.clear();
 		window.draw(map);
 
-		//Testing if it is possible to draw the same shape multiple times in different positions
-		/*zombie.setPosition(sf::Vector2f(100.0f, 100.0f));
+		//Placing enemies
+		zombie.setPosition(sf::Vector2f(1150.0f, 120.0f));
 		window.draw(zombie);
-		zombie.setPosition(sf::Vector2f(200.0f, 200.0f));
-		window.draw(zombie);*/
+		zombie.setPosition(sf::Vector2f(130.0f, 540.0f));
+		window.draw(zombie);
+		zombie.setPosition(sf::Vector2f(130.0f, 240.0f));
+		window.draw(zombie);
+		zombie.setPosition(sf::Vector2f(310.0f, 240.0f));
+		window.draw(zombie);
+		vampire.setPosition(sf::Vector2f(310.0f, 420.0f));
+		window.draw(vampire);
+		vampire.setPosition(sf::Vector2f(1030.0f, 180.0f));
+		window.draw(vampire);
+		vampire.setPosition(sf::Vector2f(1030.0f, 300.0f));
+		window.draw(vampire);
+		vampire.setPosition(sf::Vector2f(1150.0f, 420.0f));
+		window.draw(vampire);
 
 		window.draw(Irondhul);
 		window.display();
