@@ -30,6 +30,9 @@
     <ClInclude Include="Potion.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TileMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="IronTorch.cpp">
@@ -44,6 +47,9 @@
     <ClCompile Include="Potion.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TileMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="left.png">
@@ -52,8 +58,28 @@
     <Image Include="right.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="death.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="vampire(left).png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="zombie(right).png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="tileset.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="openal32.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="boss_song.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="theme_song.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
   </ItemGroup>
 </Project>

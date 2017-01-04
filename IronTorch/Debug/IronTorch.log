@@ -1,5 +1,9 @@
 ﻿  IronTorch.cpp
-  LINK : D:\Proiect-Git\IronTorch_game\Debug\IronTorch.exe not found or not built by the last incremental link; performing full link
-G_Unit.obj : warning LNK4099: PDB 'vc140.pdb' was not found with 'G_Unit.obj' or at 'D:\Proiect-Git\IronTorch_game\Debug\vc140.pdb'; linking object as if no debug info
+d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(20): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(195): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(211): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(224): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(239): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   IronTorch.vcxproj -> D:\Proiect-Git\IronTorch_game\Debug\IronTorch.exe
   IronTorch.vcxproj -> D:\Proiect-Git\IronTorch_game\Debug\IronTorch.pdb (Full PDB)

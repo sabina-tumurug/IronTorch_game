@@ -155,19 +155,29 @@
     <ClInclude Include="G_Unit.h" />
     <ClInclude Include="Potion.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="TileMap.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CharacterModel.cpp" />
     <ClCompile Include="G_Unit.cpp" />
     <ClCompile Include="IronTorch.cpp" />
     <ClCompile Include="Potion.cpp" />
+    <ClCompile Include="TileMap.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="death.png" />
     <Image Include="left.png" />
     <Image Include="right.png" />
+    <Image Include="tileset.png" />
+    <Image Include="vampire(left).png" />
+    <Image Include="zombie(right).png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="openal32.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="boss_song.wav" />
+    <Media Include="theme_song.wav" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
