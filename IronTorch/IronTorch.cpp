@@ -131,9 +131,9 @@ int main()
 
 	//Enemies
 	sf::RectangleShape vampire(sf::Vector2f(characterWidth, characterHeight));
-	sf::Texture vampTexture;
-	vampTexture.loadFromFile(vampTexture_path);
-	vampire.setTexture(&vampTexture);
+	sf::Texture vampireTexture;
+	vampireTexture.loadFromFile(vampTexture_path);
+	vampire.setTexture(&vampireTexture);
 
 	sf::RectangleShape zombie(sf::Vector2f(characterWidth, characterHeight));
 	sf::Texture zombieTexture;
@@ -278,6 +278,26 @@ int main()
 		window.draw(zombie);
 		zombie.setPosition(sf::Vector2f(200.0f, 200.0f));
 		window.draw(zombie);*/
+
+		//Draw enemies
+		vampire.setPosition(sf::Vector2f(310.0f, 420.0f));
+		window.draw(vampire);
+		vampire.setPosition(sf::Vector2f(1030.0f, 180.0f));
+		window.draw(vampire);
+		vampire.setPosition(sf::Vector2f(1030.0f, 300.0f));
+		window.draw(vampire);
+		vampire.setPosition(sf::Vector2f(1150.0f, 420.0f));
+		window.draw(vampire);
+
+		zombie.setPosition(sf::Vector2f(1150.0f, 120.0f));
+		window.draw(zombie);
+		zombie.setPosition(sf::Vector2f(130.0f, 540.0f));
+		window.draw(zombie);
+		zombie.setPosition(sf::Vector2f(130.0f, 240.0f));
+		window.draw(zombie);
+		zombie.setPosition(sf::Vector2f(310.0f, 240.0f));
+		window.draw(zombie);
+		///////////////////
 
 		window.draw(Irondhul);
 		window.display();
