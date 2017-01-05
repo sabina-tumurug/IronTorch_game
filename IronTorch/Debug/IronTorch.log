@@ -1,9 +1,13 @@
 ﻿  IronTorch.cpp
 d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(20): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
 d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(195): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(199): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(205): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
 d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(211): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(224): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(239): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(217): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(243): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(259): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(272): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(287): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   IronTorch.vcxproj -> D:\Proiect-Git\IronTorch_game\Debug\IronTorch.exe
   IronTorch.vcxproj -> D:\Proiect-Git\IronTorch_game\Debug\IronTorch.pdb (Full PDB)

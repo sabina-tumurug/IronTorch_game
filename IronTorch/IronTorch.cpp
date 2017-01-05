@@ -10,64 +10,45 @@ using namespace std;
 
 ////Get the Sprite the point intersects and check if it's background = true;
 //TODO: to be implemented with G_Unit
-bool seeWhatIntersectsIntersects(float point_X, float point_Y, const int levelTileMap[])
+bool seeWhatIntersectsIntersects(float point_X, float point_Y,/* const int levelTileMap[]*/ G_Unit gMatrix[200])
 {
 	//Get retangle
 	//*************
 	//TODO: to be replaced with G_Unit
 	sf::Vector2i vct = sf::Vector2i();
 
-	vct.x = point_X / /*tileWidth*/ 60;
-	vct.y = point_Y / /*tileWidth*/ 60;
+	vct.x = point_X / 60;
+	vct.y = point_Y / 60;
 
-	int intersectingSprite = levelTileMap[vct.x + (vct.y * 20)];
+	G_Unit intersectingSprite = gMatrix[vct.x + (vct.y * 20)];
 
-	if (intersectingSprite > 0)
-		return true;
-
-	return false;
-	//***************************************
-	//Check if it's background
-	//TODO: to be replaced with G_Unit
-
-
-
-	//if (futurePosition_X < Xmin || futurePosition_X > Xmax || futurePosition_Y < Ymin || futurePosition_Y > Ymax)
-	//{
-	//	// Definitely not within the polygon!
-	//	return true;
-	//}
+	return intersectingSprite.IsBackground;
 }
 //levelG_UnitMap to be changed from int[] ~> G_Unit[]
-bool CollisionDetection(sf::RectangleShape &obj, float moveX, float moveY, const int levelG_UnitMap[])
+bool CollisionDetection(sf::RectangleShape &obj, float moveX, float moveY, /*const int levelG_UnitMap[]*/ G_Unit gMatrix[200])
 {
 	bool token_result = false;
 	//get the new four corners of the sprite, and check if sprite it intersects is background or not
 	sf::Vector2f objPoz = obj.getPosition();
 	sf::Vector2f objSize = obj.getSize();
 	//1.Get upper left corner
-	token_result = seeWhatIntersectsIntersects(objPoz.x + moveX, objPoz.y + moveY, levelG_UnitMap);
+	token_result = seeWhatIntersectsIntersects(objPoz.x + moveX, objPoz.y + moveY, /*levelG_UnitMap*/gMatrix);
 	if (!token_result)
 		return false;
 	//2.Get upper right corner
-	token_result = seeWhatIntersectsIntersects(objPoz.x + moveX + objSize.x, objPoz.y + moveY, levelG_UnitMap);
+	token_result = seeWhatIntersectsIntersects(objPoz.x + moveX + objSize.x, objPoz.y + moveY, /*levelG_UnitMap*/gMatrix);
 	if (!token_result)
 		return false;
 	//3.Get lower left corner
-	token_result = seeWhatIntersectsIntersects(objPoz.x + moveX, objPoz.y + moveY + objSize.y, levelG_UnitMap);
+	token_result = seeWhatIntersectsIntersects(objPoz.x + moveX, objPoz.y + moveY + objSize.y, /*levelG_UnitMap*/gMatrix);
 	if (!token_result)
 		return false;
 	//4.Get lower right corner
-	token_result = seeWhatIntersectsIntersects(objPoz.x + moveX + objSize.x, objPoz.y + moveY + objSize.y, levelG_UnitMap);
+	token_result = seeWhatIntersectsIntersects(objPoz.x + moveX + objSize.x, objPoz.y + moveY + objSize.y, /*levelG_UnitMap*/gMatrix);
 	if (!token_result)
 		return false;
-	//// p is your point, p.x is the x coord, p.y is the y coord
-	//if (futurePosition_X < Xmin || futurePosition_X > Xmax || futurePosition_Y < Ymin || futurePosition_Y > Ymax) {
-	//	// Definitely not within the polygon!
-	//	return true;
-	//}
-	return true;
 
+	return true;
 }
 
 bool allowMovement(sf::RectangleShape &obj, float moveX, float moveY, float windowWidth, float windowHeight)
@@ -76,8 +57,6 @@ bool allowMovement(sf::RectangleShape &obj, float moveX, float moveY, float wind
 	sf::Vector2f siz = obj.getSize();
 
 	//position from sprites base point
-	/*int posX = pos.x;
-	int posY = pos.y;*/
 	float posX = pos.x;
 	float posY = pos.y;
 
@@ -118,6 +97,11 @@ int main()
 	//changed hight for testing
 	float characterHeight = 50;
 
+	//Map size (maybe DEFINE it as a CONSTANT
+	const int mapSizeHeight = 10;
+	const int mapSizeWidth = 20;
+
+	G_Unit g_unitMatrix[200]; 
 
 	//Sprites
 	string IrondhulLeftTexture_path = "left.png";
@@ -138,7 +122,7 @@ int main()
 	
 	//Irondhul properties
 	sf::RectangleShape Irondhul(sf::Vector2f(characterWidth, characterHeight));
-	Irondhul.setPosition(windowWidth-characterWidth, windowHeight-characterHeight);
+	Irondhul.setPosition(windowWidth-characterWidth - 5, windowHeight-characterHeight - 5);
 	sf::Texture IrondhulTextureLeft;
 	IrondhulTextureLeft.loadFromFile(IrondhulLeftTexture_path);
 	Irondhul.setTexture(&IrondhulTextureLeft);
@@ -175,8 +159,46 @@ int main()
 		3, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,
 		2, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 	};
+	//dinamicly populate de matrix
+	for(int i = 0; i < mapSizeHeight; i++)
+		for (int j = 0; j < mapSizeWidth; j++)
+		{
+			int spriteType = level[j + (i * mapSizeWidth)];
+			G_Unit newG;// = G_Unit();
+			switch (spriteType)
+			{
+				//0 = WALL
+				case 0:
+				{
+					newG = G_Unit(tileHeight, tileWidth, j * tileWidth, i * tileHeight, false, "");
+					break;
+				}
+				//1 = CORRIDOR
+				case 1:
+				{
+					newG = G_Unit(tileHeight, tileWidth, j * tileWidth, i * tileHeight, true, "");
+					break;
+				}
+				//2 = CHEST
+				case 2:
+				{
+					newG = G_Unit(tileHeight, tileWidth, j * tileWidth, i * tileHeight, true, "");
+					break;
+				}
+				//3 = DOOR
+				case 3:
+				{
+					newG = G_Unit(tileHeight, tileWidth, j * tileWidth, i * tileHeight, false, "");
+					break;
+				}
+			default:
+				break;
+			}
+			g_unitMatrix[j + (i * mapSizeWidth)] = newG;
+		}
+
 	TileMap map;
-	if (!map.load("tileset.png", sf::Vector2u(tileWidth, tileHeight), level, 20, 10))
+	if (!map.load("tileset.png", sf::Vector2u(tileWidth, tileHeight), level, mapSizeWidth, mapSizeHeight))
 		return -1;
 	/////////////////////////////////////////////////////////////////////////////////
 
@@ -194,7 +216,7 @@ int main()
 		{
 			if (allowMovement(Irondhul, -0.1f, 0.0f, windowWidth, windowHeight))
 			{
-				if (CollisionDetection(Irondhul, -0.1f, 0.0f, level))
+				if (CollisionDetection(Irondhul, -0.1f, 0.0f, /*level*/ g_unitMatrix))
 				{
 					Irondhul.move(-0.1f, 0.0f);
 					Irondhul.setTexture(&IrondhulTextureLeft);
@@ -210,7 +232,7 @@ int main()
 		{
 			if (allowMovement(Irondhul, 0.0f, 0.1f, windowWidth, windowHeight))
 			{
-				if (CollisionDetection(Irondhul, 0.0f, 0.1f, level))
+				if (CollisionDetection(Irondhul, 0.0f, 0.1f, /*level*/ g_unitMatrix))
 				{
 					Irondhul.move(0.0f, 0.1f);
 				}
@@ -223,7 +245,7 @@ int main()
 		{
 			if (allowMovement(Irondhul, 0.1f, 0.0f, windowWidth, windowHeight))
 			{
-				if (CollisionDetection(Irondhul, 0.1f, 0.0f, level))
+				if (CollisionDetection(Irondhul, 0.1f, 0.0f, /*level*/ g_unitMatrix))
 				{
 					Irondhul.move(0.1f, 0.0f);
 					Irondhul.setTexture(&IrondhulTextureRight);
@@ -238,11 +260,11 @@ int main()
 		{
 			if (allowMovement(Irondhul, 0.f, -0.1f, windowWidth, windowHeight))
 			{
-				if (CollisionDetection(Irondhul, 0.f, -0.1f, level))
+				if (CollisionDetection(Irondhul, 0.f, -0.1f, /*level*/ g_unitMatrix))
 				{
 					Irondhul.move(0.0f, -0.1f);
 				}
-				Irondhul.move(0.0f, -0.1f);
+				//Irondhul.move(0.0f, -0.1f);
 			}
 			//Irondhul.move(0.0f, -0.1f);
 		}
