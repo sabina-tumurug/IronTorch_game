@@ -9,6 +9,9 @@ G_Unit::G_Unit()
 	Position_x = 0.0f;
 	Position_y = 0.0f;
 	IsBackground = false;
+
+	NPC = nullptr;
+
 }
 
 G_Unit::G_Unit(float newHeight, float newWidth, float newPosition_x, float newPosition_y, bool newIsBackground, std::string newPath = "")
@@ -19,6 +22,8 @@ G_Unit::G_Unit(float newHeight, float newWidth, float newPosition_x, float newPo
 	Position_x = newPosition_x;
 	Position_y = newPosition_y;
 	IsBackground = newIsBackground;
+
+	NPC = nullptr;
 }
 
 bool G_Unit::isColiding(float pos_x, float pos_y)
@@ -30,6 +35,30 @@ bool G_Unit::isColiding(float pos_x, float pos_y)
 float G_Unit::getArea()
 {
 	return Height * Width;
+}
+
+
+
+bool G_Unit::containsNPC()
+{
+	if (NPC != nullptr && NPC != NULL) return true;
+	return false;
+}
+
+CharacterModel * G_Unit::getNPC()
+{
+	return NPC;
+}
+
+void G_Unit::setNPC(CharacterModel *newNPC)
+{
+	NPC = newNPC;
+}
+
+void G_Unit::deleteNPC()
+{
+	//delete NPC; //freed memory
+	NPC = NULL;
 }
 
 G_Unit::~G_Unit()

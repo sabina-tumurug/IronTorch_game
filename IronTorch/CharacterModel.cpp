@@ -37,10 +37,10 @@ std::string name;
 Potion potionList[100];
 int potionList_Size;
 */
-CharacterModel::CharacterModel(std::string chName)
+CharacterModel::CharacterModel(int id, std::string chName)
 {
 	name = chName;
-
+	ID = id;
 	hp = 100;
 	attack = 10.0f;
 	defence = 10.0f;
@@ -51,6 +51,27 @@ CharacterModel::CharacterModel(std::string chName)
 	endurance = 5;
 
 	potionList_Size = 0;
+}
+
+CharacterModel::CharacterModel()
+{
+	name = "n/a";
+	ID = -1;
+	hp = 100;
+	attack = 10.0f;
+	defence = 10.0f;
+
+	strenght = 5;
+	agility = 5;
+	inteligence = 5;
+	endurance = 5;
+
+	potionList_Size = 0;
+}
+
+int CharacterModel::getID()
+{
+	return ID;
 }
 
 int CharacterModel::getHP()
@@ -162,6 +183,12 @@ float CharacterModel::combat_defend(float attackPow)
 
 	hp -= dmg;
 	return dmg; 
+}
+
+void CharacterModel::cloneShape(const CharacterModel &obj)
+{
+	shape = new sf::RectangleShape();
+	*shape = *obj.shape;
 }
 
 CharacterModel::~CharacterModel()

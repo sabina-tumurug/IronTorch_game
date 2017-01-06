@@ -1,6 +1,8 @@
 #pragma once
 #include<string>
 #include "Potion.h"
+#include <SFML/Graphics.hpp>
+
 class CharacterModel
 {
 private:
@@ -11,6 +13,8 @@ private:
 	float attack, defence;
 	int strenght, agility, inteligence, endurance;
 
+	int ID;
+
 	void incrStrenght(int);
 	void incrAgility(int);
 	void incrInteligence(int);
@@ -18,13 +22,18 @@ private:
 
 	int getPotionPositionByID(int);
 	void removePotionAtPosition(int);
+
+
 public:
 	std::string name;
 	Potion potionList[100];
 	int potionList_Size;
+	sf::RectangleShape* shape;
 
-	CharacterModel(std::string name);
-	
+	CharacterModel(int id,std::string name);
+	CharacterModel();
+	int getID();
+
 	int getHP();
 	float getAttack();
 	float getDefence();
@@ -36,6 +45,8 @@ public:
 
 	float combat_attack();
 	float combat_defend(float);
+
+	void cloneShape(const CharacterModel &obj);
 	~CharacterModel();
 };
 
