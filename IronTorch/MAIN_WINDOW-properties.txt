@@ -1,0 +1,4 @@
+height=600
+width=1200
+sprite_height=60
+sprite_width=60

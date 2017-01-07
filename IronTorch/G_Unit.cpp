@@ -41,8 +41,8 @@ float G_Unit::getArea()
 
 bool G_Unit::containsNPC()
 {
-	if (NPC != nullptr && NPC != NULL) return true;
-	return false;
+	if (NPC == nullptr || NPC == NULL) return false;
+	return true;
 }
 
 CharacterModel * G_Unit::getNPC()
@@ -58,6 +58,7 @@ void G_Unit::setNPC(CharacterModel *newNPC)
 void G_Unit::deleteNPC()
 {
 	//delete NPC; //freed memory
+	NPC->isDead = true;
 	NPC = NULL;
 }
 

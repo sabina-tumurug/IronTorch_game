@@ -1,7 +1,9 @@
 #pragma once
 #include<string>
 #include "Potion.h"
+#include<fstream>
 #include <SFML/Graphics.hpp>
+#include <sstream>
 
 class CharacterModel
 {
@@ -13,7 +15,7 @@ private:
 	float attack, defence;
 	int strenght, agility, inteligence, endurance;
 
-	int ID;
+	std::string ID;
 
 	void incrStrenght(int);
 	void incrAgility(int);
@@ -23,16 +25,21 @@ private:
 	int getPotionPositionByID(int);
 	void removePotionAtPosition(int);
 
+	
+
 
 public:
 	std::string name;
-	Potion potionList[100];
+	std::vector<Potion>  potionList;
 	int potionList_Size;
 	sf::RectangleShape* shape;
+	bool isDead;
 
-	CharacterModel(int id,std::string name);
+	std::string spritePath;
+
+	CharacterModel(std::string id,std::string name);
 	CharacterModel();
-	int getID();
+	std::string getID();
 
 	int getHP();
 	float getAttack();
@@ -47,6 +54,9 @@ public:
 	float combat_defend(float);
 
 	void cloneShape(const CharacterModel &obj);
+	CharacterModel static loadFromFile(std::string);
+	void loadToFile();
+	//DELETE FILES WHEN DECONSTRUCTING
 	~CharacterModel();
 };
 

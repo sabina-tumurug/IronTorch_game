@@ -1,0 +1,16 @@
+id=MainCharacter_Irondhul
+name=Irondhul
+hp=100
+attack=10.000000
+defence=10.000000
+strenght=5
+agility=5
+inteligence=5
+endurance=5
+isDead=0
+spritePath=
+sprite_width=40
+sprite_height=50
+sprite_positionX200
+sprite_positionY200
+potions=[]
