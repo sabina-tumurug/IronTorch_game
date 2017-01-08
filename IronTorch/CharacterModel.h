@@ -25,7 +25,8 @@ private:
 	int getPotionPositionByID(int);
 	void removePotionAtPosition(int);
 
-	
+	std::string spritePath_left;
+	std::string spritePath_right;
 
 
 public:
@@ -35,7 +36,10 @@ public:
 	sf::RectangleShape* shape;
 	bool isDead;
 
-	std::string spritePath;
+	
+
+	sf::Texture spriteTexture_left;
+	sf::Texture spriteTexture_right;
 
 	CharacterModel(std::string id,std::string name);
 	CharacterModel();
@@ -56,6 +60,13 @@ public:
 	void cloneShape(const CharacterModel &obj);
 	CharacterModel static loadFromFile(std::string);
 	void loadToFile();
+	void orientSpriteToLeft();
+	void orientSpriteToRight();
+
+	void setSpritePath_Left(std::string);
+	std::string getSpritePath_Left();
+	void setSpritePath_Right(std::string);
+	std::string getSpritePath_Right();
 	//DELETE FILES WHEN DECONSTRUCTING
 	~CharacterModel();
 };

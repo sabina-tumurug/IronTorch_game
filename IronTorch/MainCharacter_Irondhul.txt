@@ -8,9 +8,10 @@ agility=5
 inteligence=5
 endurance=5
 isDead=0
-spritePath=
+spritePath_left=left.png
+spritePath_right=right.png
 sprite_width=40
 sprite_height=50
-sprite_positionX200
-sprite_positionY200
+sprite_positionX360
+sprite_positionY240
 potions=[]

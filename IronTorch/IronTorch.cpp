@@ -17,7 +17,7 @@ using namespace std;
 
 //Encoutered an enemy. Be ready to battleeeeeeeee
 //'Can put battleWindowFileName as a <declare>
-void battleStart(sf::RenderWindow* window, string battleWindowFileName/*, CharacterModel *enemy*/, CharacterModel* character)
+void battleStart(sf::RenderWindow* window, CharacterModel *enemy, CharacterModel* character)
 {
 	//ifstream battleWin_File;
 	//battleWin_File.open(battleWindowFileName);
@@ -26,9 +26,20 @@ void battleStart(sf::RenderWindow* window, string battleWindowFileName/*, Charac
 	//{
 	//	battleWin_File.close();
 	//}
+	int batlTileWidth = 60;
+	int batlTileHeight = 60;
 
-	//Draw new TileMap (battle version)
-	//can be adapted to get the level from a file
+	int batlMapWidth = 20;
+	int batlMapWHeight = 10;
+
+	enemy->orientSpriteToLeft();
+
+	//x=6;y=4
+	character->shape->setPosition( (batlMapWidth / 4 + 1) * batlTileHeight, (batlMapWHeight / 2 - 1) * batlTileWidth);
+	enemy->shape->setPosition((batlMapWidth - (batlMapWidth / 4 + 1)) * batlTileHeight, (batlMapWHeight / 2 - 1) * batlTileWidth);
+
+	character->orientSpriteToRight();
+
 	const int battleLevel[] =
 	{
 		3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
@@ -43,15 +54,11 @@ void battleStart(sf::RenderWindow* window, string battleWindowFileName/*, Charac
 		3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
 	};
 
-	int batlTileWidth = 60;
-	int batlTileHeight = 60;
-
-	int batlMapWidth = 20;
-	int batlMapWHeight = 10;
+	
 
 	TileMap battleMap;
 
-	if (!battleMap.load(battleWindowFileName, sf::Vector2u(batlTileWidth, batlTileHeight), battleLevel, batlMapWidth, batlMapWHeight))
+	if (!battleMap.load("battle-tileSet.png", sf::Vector2u(batlTileWidth, batlTileHeight), battleLevel, batlMapWidth, batlMapWHeight))
 		return;
 
 	while (window->isOpen())
@@ -71,11 +78,11 @@ void battleStart(sf::RenderWindow* window, string battleWindowFileName/*, Charac
 		//double the proportions of the sprite
 		character->loadToFile();
 		
-		character->shape->setPosition(200.0f, 200.0f);
 		window->clear();
 		
 		window->draw(battleMap);
 		window->draw(*(character->shape));
+		window->draw(*(enemy->shape));
 
 		window->display();
 
@@ -94,7 +101,7 @@ void battleStart(sf::RenderWindow* window, string battleWindowFileName/*, Charac
 }
 
 //TODO: to be implemented with G_Unit
-bool seeWhatIntersectsIntersects(CharacterModel* character, float point_X, float point_Y,/* const int levelTileMap[]*/ G_Unit gMatrix[200], CharacterModel *enList, int enListCount, sf::RenderWindow *window)
+bool seeWhatIntersectsIntersects(CharacterModel* character, float point_X, float point_Y,/* const int levelTileMap[]*/ G_Unit gMatrix[200]/*, CharacterModel *enList, int enListCount*/, sf::RenderWindow *window)
 {
 	//Get retangle
 	//*************
@@ -113,8 +120,8 @@ bool seeWhatIntersectsIntersects(CharacterModel* character, float point_X, float
 		//eliminateNPC(/*npcList2*/enList, /*npcList2Count*/enListCount, intersectingSprite.getNPC()->getID());
 
 		//delete npc from G_Unit
-
-		battleStart(window, "battle-tileSet.png"/*, CharacterModel *enemy*/, character);
+		CharacterModel *enemy = intersectingSprite.getNPC();
+		battleStart(window, enemy/*, CharacterModel *enemy*/, character);
 
 		intersectingSprite.deleteNPC();
 
@@ -123,7 +130,7 @@ bool seeWhatIntersectsIntersects(CharacterModel* character, float point_X, float
 	return intersectingSprite.IsBackground;
 }
 //levelG_UnitMap to be changed from int[] ~> G_Unit[]
-bool CollisionDetection(/*sf::RectangleShape &obj*/CharacterModel *character, float moveX, float moveY, /*const int levelG_UnitMap[]*/ G_Unit gMatrix[200], CharacterModel *enList, int enListCount, sf::RenderWindow *window)
+bool CollisionDetection(/*sf::RectangleShape &obj*/CharacterModel *character, float moveX, float moveY, /*const int levelG_UnitMap[]*/ G_Unit gMatrix[200]/*, CharacterModel *enList, int enListCount*/, sf::RenderWindow *window)
 {
 	//sf::RectangleShape obj = character->shape;
 	bool token_result = false;
@@ -131,19 +138,19 @@ bool CollisionDetection(/*sf::RectangleShape &obj*/CharacterModel *character, fl
 	sf::Vector2f objPoz = character->shape->getPosition();
 	sf::Vector2f objSize = character->shape->getSize();
 	//1.Get upper left corner
-	token_result = seeWhatIntersectsIntersects(character, objPoz.x + moveX, objPoz.y + moveY, /*levelG_UnitMap*/gMatrix, enList, enListCount, window);
+	token_result = seeWhatIntersectsIntersects(character, objPoz.x + moveX, objPoz.y + moveY, /*levelG_UnitMap*/gMatrix/*, enList, enListCount*/, window);
 	if (!token_result)
 		return false;
 	//2.Get upper right corner
-	token_result = seeWhatIntersectsIntersects(character, objPoz.x + moveX + objSize.x, objPoz.y + moveY, /*levelG_UnitMap*/gMatrix, enList, enListCount, window);
+	token_result = seeWhatIntersectsIntersects(character, objPoz.x + moveX + objSize.x, objPoz.y + moveY, /*levelG_UnitMap*/gMatrix/*, enList, enListCount*/, window);
 	if (!token_result)
 		return false;
 	//3.Get lower left corner
-	token_result = seeWhatIntersectsIntersects(character, objPoz.x + moveX, objPoz.y + moveY + objSize.y, /*levelG_UnitMap*/gMatrix, enList, enListCount, window);
+	token_result = seeWhatIntersectsIntersects(character, objPoz.x + moveX, objPoz.y + moveY + objSize.y, /*levelG_UnitMap*/gMatrix/*, enList, enListCount*/, window);
 	if (!token_result)
 		return false;
 	//4.Get lower right corner
-	token_result = seeWhatIntersectsIntersects(character, objPoz.x + moveX + objSize.x, objPoz.y + moveY + objSize.y, /*levelG_UnitMap*/gMatrix, enList, enListCount, window);
+	token_result = seeWhatIntersectsIntersects(character, objPoz.x + moveX + objSize.x, objPoz.y + moveY + objSize.y, /*levelG_UnitMap*/gMatrix/*, enList, enListCount*/, window);
 	if (!token_result)
 		return false;
 
@@ -181,6 +188,21 @@ bool allowMovement(sf::RectangleShape &obj, float moveX, float moveY, float wind
 	return true;
 }
 
+///////Experiment
+//void orientSpriteToLeft(CharacterModel *ch)
+//{
+//	//sf::Texture textureLeft;
+//	//textureLeft.loadFromFile(ch->spritePath_left);
+//	//ch->shape->setTexture(&textureLeft);
+//}
+//
+//void orientSpriteToRight(CharacterModel *ch)
+//{
+//	//sf::Texture textureRight;
+//	//textureRight.loadFromFile(ch->spritePath_right);
+//	///ch->shape->setTexture(&textureRight);
+//}
+//////////////////////
 
 int main()
 {
@@ -258,6 +280,9 @@ int main()
 
 	CharacterModel Irondhul_Ch = CharacterModel("MainCharacter_Irondhul", "Irondhul");
 	Irondhul_Ch.shape = &Irondhul;
+	Irondhul_Ch.setSpritePath_Left(IrondhulLeftTexture_path);
+	Irondhul_Ch.setSpritePath_Right(IrondhulRightTexture_path);
+
 
 	//Enemies
 	sf::RectangleShape vampire(sf::Vector2f(characterWidth, characterHeight));
@@ -281,51 +306,68 @@ int main()
 	CharacterModel z1 = CharacterModel("1","Zombie");
 	z1.shape = &zombie;
 	z1.shape->setPosition(sf::Vector2f(1150.0f, 120.0f));
+	z1.setSpritePath_Left("zombie(left).png");
+	z1.setSpritePath_Right("zombie(right).png");
+	z1.orientSpriteToRight();
 
 	//zombie#2
 	CharacterModel z2 = CharacterModel("2","Zombie");
 	z2.cloneShape(z1);
+	z2.setSpritePath_Left("zombie(left).png");
+	z2.setSpritePath_Right("zombie(right).png");
+	z2.orientSpriteToRight();
+
 	z2.shape->setPosition(sf::Vector2f(130.0f, 540.0f));
 
 	//zombie#3
 	CharacterModel z3 = CharacterModel("3","Zombie");
 	z3.cloneShape(z2);
 	z3.shape->setPosition(sf::Vector2f(130.0f, 240.0f));
-
+	z3.setSpritePath_Left("zombie(left).png");
+	z3.setSpritePath_Right("zombie(right).png");
+	z3.orientSpriteToRight();
+	
 	//zombie#4
 	CharacterModel z4 = CharacterModel("4","Zombie");
 	z4.cloneShape(z3);
 	z4.shape->setPosition(sf::Vector2f(310.0f, 240.0f));
+	z4.setSpritePath_Left("zombie(left).png");
+	z4.setSpritePath_Right("zombie(right).png");
+	z4.orientSpriteToRight();
 
 	//vampire#1
 	CharacterModel v1 = CharacterModel("5","Vampire");
 	v1.shape = &vampire;
 	v1.shape->setPosition(sf::Vector2f(310.0f, 420.0f));
+	v1.setSpritePath_Left("vampire(left).png");
+	v1.setSpritePath_Right("vampire(right).png");
+	v1.orientSpriteToLeft();
+
 	//vampire#2
 	CharacterModel v2 = CharacterModel("6","Vampire");
 	v2.cloneShape(v1);
 	v2.shape->setPosition(sf::Vector2f(1030.0f, 180.0f));
+	v2.setSpritePath_Left("vampire(left).png");
+	v2.setSpritePath_Right("vampire(right).png");
+	v2.orientSpriteToLeft();
+
 	//vampire#3
 	CharacterModel v3 = CharacterModel("7","Vampire");
 	v3.cloneShape(v2);
 	v3.shape->setPosition(sf::Vector2f(1030.0f, 300.0f));
+	v3.setSpritePath_Left("vampire(left).png");
+	v3.setSpritePath_Right("vampire(right).png");
+	v3.orientSpriteToLeft();
 
 	//vampire#4
 	CharacterModel v4 = CharacterModel("8","Vampire");
 	v4.cloneShape(v3);
 	v4.shape->setPosition(sf::Vector2f(1150.0f, 420.0f));
+	v4.setSpritePath_Left("vampire(left).png");
+	v4.setSpritePath_Right("vampire(right).png");
+	v4.orientSpriteToLeft();
 
 	CharacterModel npclist[] =
-	/*npcList2[0] = z1;
-	npcList2[1] = z2;
-	npcList2[2] = z3;
-	npcList2[3] = z4;
-
-	npcList2[4] = v1;
-	npcList2[5] = v2;
-	npcList2[6] = v3;
-	npcList2[7] = v4;*/
-
 	{
 		z1,z2,z3,z4,v1,v2,v3,v4,
 	};
@@ -417,7 +459,7 @@ int main()
 			//battleStart(&window, "battle-tileSet.png");
 			if (allowMovement(Irondhul, -0.1f, 0.0f, windowWidth, windowHeight))
 			{
-				if (CollisionDetection(&Irondhul_Ch, -0.1f, 0.0f, /*level*/ g_unitMatrix, npclist, npcCount, &window))
+				if (CollisionDetection(&Irondhul_Ch, -0.1f, 0.0f, /*level*/ g_unitMatrix/*, npclist, npcCount*/, &window))
 				{
 					Irondhul.move(-0.1f, 0.0f);
 					Irondhul.setTexture(&IrondhulTextureLeft);
@@ -433,7 +475,7 @@ int main()
 		{
 			if (allowMovement(Irondhul, 0.0f, 0.1f, windowWidth, windowHeight))
 			{
-				if (CollisionDetection(&Irondhul_Ch, 0.0f, 0.1f, /*level*/ g_unitMatrix, npclist, npcCount,&window))
+				if (CollisionDetection(&Irondhul_Ch, 0.0f, 0.1f, /*level*/ g_unitMatrix/*, npclist, npcCount*/,&window))
 				{
 					Irondhul.move(0.0f, 0.1f);
 				}
@@ -446,7 +488,7 @@ int main()
 		{
 			if (allowMovement(Irondhul, 0.1f, 0.0f, windowWidth, windowHeight))
 			{
-				if (CollisionDetection(&Irondhul_Ch, 0.1f, 0.0f, /*level*/ g_unitMatrix, npclist, npcCount, &window))
+				if (CollisionDetection(&Irondhul_Ch, 0.1f, 0.0f, /*level*/ g_unitMatrix/*, npclist, npcCount*/, &window))
 				{
 					Irondhul.move(0.1f, 0.0f);
 					Irondhul.setTexture(&IrondhulTextureRight);
@@ -461,7 +503,7 @@ int main()
 		{
 			if (allowMovement(Irondhul, 0.f, -0.1f, windowWidth, windowHeight))
 			{
-				if (CollisionDetection(&Irondhul_Ch, 0.f, -0.1f, /*level*/ g_unitMatrix, npclist, npcCount, &window))
+				if (CollisionDetection(&Irondhul_Ch, 0.f, -0.1f, /*level*/ g_unitMatrix/*, npclist, npcCount*/, &window))
 				{
 					Irondhul.move(0.0f, -0.1f);
 				}
@@ -473,31 +515,6 @@ int main()
 
 		window.clear();
 		window.draw(map);
-
-		//Testing if it is possible to draw the same shape multiple times in different positions
-		/*zombie.setPosition(sf::Vector2f(100.0f, 100.0f));
-		window.draw(zombie);
-		zombie.setPosition(sf::Vector2f(200.0f, 200.0f));
-		window.draw(zombie);*/
-
-		//Draw enemies
-		/*vampire.setPosition(sf::Vector2f(310.0f, 420.0f));
-		window.draw(vampire);
-		vampire.setPosition(sf::Vector2f(1030.0f, 180.0f));
-		window.draw(vampire);
-		vampire.setPosition(sf::Vector2f(1030.0f, 300.0f));
-		window.draw(vampire);
-		vampire.setPosition(sf::Vector2f(1150.0f, 420.0f));
-		window.draw(vampire);
-
-		zombie.setPosition(sf::Vector2f(1150.0f, 120.0f));
-		window.draw(zombie);
-		zombie.setPosition(sf::Vector2f(130.0f, 540.0f));
-		window.draw(zombie);
-		zombie.setPosition(sf::Vector2f(130.0f, 240.0f));
-		window.draw(zombie);
-		zombie.setPosition(sf::Vector2f(310.0f, 240.0f));*/
-		//window.draw(zombie);
 
 		for (int en = 0; en < /*npcList2Count*/npcCount; en++)
 		{

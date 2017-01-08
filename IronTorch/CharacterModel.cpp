@@ -52,6 +52,8 @@ CharacterModel::CharacterModel(std::string id, std::string chName)
 
 	potionList_Size = 0;
 	isDead = false;
+	spriteTexture_left = (sf::Texture());
+	spriteTexture_right = (sf::Texture());
 }
 
 CharacterModel::CharacterModel()
@@ -69,6 +71,8 @@ CharacterModel::CharacterModel()
 
 	potionList_Size = 0;
 	isDead = false;
+	spriteTexture_left = (sf::Texture());
+	spriteTexture_right = (sf::Texture());
 }
 
 std::string CharacterModel::getID()
@@ -259,9 +263,24 @@ CharacterModel CharacterModel::loadFromFile(std::string filePath)
 				{
 					result.name= mapVal;
 				}
-				else if (mapKey == "spritePath")
+				else if (mapKey == "spritePath_left")
 				{
-					result.spritePath = mapVal;
+					result.spritePath_left = mapVal;
+					//sf::Texture textureLeft;
+					//textureLeft.loadFromFile(mapVal);
+					//ch->shape->setTexture(&textureRight);
+
+					result.spriteTexture_left.loadFromFile(mapVal);
+
+				}
+				else if (mapKey == "spritePath_right")
+				{
+					result.spritePath_right = mapVal;
+					//sf::Texture textureLeft;
+					//textureLeft.loadFromFile(mapVal);
+					//ch->shape->setTexture(&textureRight);
+
+					result.spriteTexture_right.loadFromFile(mapVal);
 				}
 				else if (mapKey == "sprite_width")
 				{
@@ -361,13 +380,13 @@ CharacterModel CharacterModel::loadFromFile(std::string filePath)
 	}
 
 	//building the shape
-	if (!result.spritePath.empty() && shape_height >= 0.0f && shape_width >= 0.0f && shape_positionX >= 0.0f && shape_positionY >= 0.0f)
+	if (!result.spritePath_right.empty() && !result.spritePath_left.empty() && shape_height >= 0.0f && shape_width >= 0.0f && shape_positionX >= 0.0f && shape_positionY >= 0.0f)
 	{
 		sf::RectangleShape protoShape(sf::Vector2f(shape_width, shape_height));
 		protoShape.setPosition(shape_positionX,shape_positionY);
 
 		sf::Texture protoShape_Texture;
-		protoShape_Texture.loadFromFile(result.spritePath);
+		protoShape_Texture.loadFromFile(result.spritePath_right);
 		protoShape.setTexture(&protoShape_Texture);
 
 		result.shape = &protoShape;
@@ -396,7 +415,8 @@ void CharacterModel::loadToFile()
 		chStream << "inteligence=" << std::to_string(inteligence) << std::endl;
 		chStream << "endurance=" << std::to_string(endurance) << std::endl;
 		chStream << "isDead=" << std::to_string(isDead) << std::endl;
-		chStream << "spritePath=" << spritePath << std::endl;
+		chStream << "spritePath_left=" << spritePath_left << std::endl;
+		chStream << "spritePath_right=" << spritePath_right << std::endl;
 		chStream << "sprite_width=" << shape->getSize().x << std::endl;
 		chStream << "sprite_height=" << shape->getSize().y << std::endl;
 		chStream << "sprite_positionX" << shape->getPosition().x << std::endl;
@@ -427,6 +447,53 @@ void CharacterModel::loadToFile()
 
 		chStream.close();
 	}
+}
+
+void CharacterModel::orientSpriteToLeft()
+{/*
+	sf::Texture textureLeft;
+	textureLeft.loadFromFile(spritePath_left);*/
+
+	shape->setTexture(&spriteTexture_left);
+}
+
+void CharacterModel::orientSpriteToRight()
+{
+	//sf::Texture textureRight;
+	//textureRight.loadFromFile(spritePath_right);
+	//sf::Texture ex1 = *spriteTexture_right;
+
+	shape->setTexture(&spriteTexture_right);
+}
+
+void CharacterModel::setSpritePath_Left(std::string const val)
+{
+	spritePath_left = val;
+	//sf::Texture ex;
+	//ex.loadFromFile(val);
+	spriteTexture_left.loadFromFile(val);
+	//spriteTexture_left = &ex;
+
+}
+
+std::string CharacterModel::getSpritePath_Left()
+{
+	return spritePath_left;
+}
+
+void CharacterModel::setSpritePath_Right(std::string const val)
+{
+	spritePath_right = val;
+	//spriteTexture_right->loadFromFile(val);
+	//sf::Texture ex;
+	//ex.loadFromFile(val);
+	spriteTexture_right.loadFromFile(val);
+	//spriteTexture_right = ex;
+}
+
+std::string CharacterModel::getSpritePath_Right()
+{
+	return spritePath_right;
 }
 
 CharacterModel::~CharacterModel()

@@ -1,16 +1,18 @@
 ﻿  IronTorch.cpp
-d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(104): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(105): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(360): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(366): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(372): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(378): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(392): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(393): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(418): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(434): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(447): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(462): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(505): warning C4138: '*/' found outside of comment
+d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(38): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(39): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(111): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(112): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(402): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(408): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(414): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(420): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(434): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(435): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(460): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(476): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(489): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(504): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\proiect-git\irontorch_game\irontorch\irontorch.cpp(522): warning C4138: '*/' found outside of comment
   IronTorch.vcxproj -> D:\Proiect-Git\IronTorch_game\Debug\IronTorch.exe
   IronTorch.vcxproj -> D:\Proiect-Git\IronTorch_game\Debug\IronTorch.pdb (Full PDB)

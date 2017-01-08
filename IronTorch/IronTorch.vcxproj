@@ -170,6 +170,8 @@
     <Image Include="right.png" />
     <Image Include="tileset.png" />
     <Image Include="vampire(left).png" />
+    <Image Include="vampire(right).png" />
+    <Image Include="zombie(left).png" />
     <Image Include="zombie(right).png" />
   </ItemGroup>
   <ItemGroup>
