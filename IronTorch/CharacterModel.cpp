@@ -496,6 +496,26 @@ std::string CharacterModel::getSpritePath_Right()
 	return spritePath_right;
 }
 
+std::string CharacterModel::getStats()
+{
+	std::string result = "";
+	result += name + "\n";
+	result += "HP: " + std::to_string(hp) + "\n";
+	std::stringstream stream;
+	stream << std::fixed << std::setprecision(2) << attack;
+	result +="Atack: " + stream.str() + "\n";
+
+	stream.clear();
+	stream.str(std::string());
+	stream << std::fixed << std::setprecision(2) << defence;
+	result += "Defence: " + stream.str() + "\n";
+	//result += "Attack: " + std::to_string(std::setprecision(attack,2)  ) + "\n";
+	//result += "Defence: " + std::to_string(defence) + "\n";
+
+
+	return result;
+}
+
 CharacterModel::~CharacterModel()
 {
 }

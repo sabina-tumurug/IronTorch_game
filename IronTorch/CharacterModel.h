@@ -4,6 +4,7 @@
 #include<fstream>
 #include <SFML/Graphics.hpp>
 #include <sstream>
+#include <iomanip>
 
 class CharacterModel
 {
@@ -67,6 +68,7 @@ public:
 	std::string getSpritePath_Left();
 	void setSpritePath_Right(std::string);
 	std::string getSpritePath_Right();
+	std::string getStats();
 	//DELETE FILES WHEN DECONSTRUCTING
 	~CharacterModel();
 };

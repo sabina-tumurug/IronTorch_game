@@ -54,12 +54,51 @@ void battleStart(sf::RenderWindow* window, CharacterModel *enemy, CharacterModel
 		3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
 	};
 
-	
-
 	TileMap battleMap;
-
 	if (!battleMap.load("battle-tileSet.png", sf::Vector2u(batlTileWidth, batlTileHeight), battleLevel, batlMapWidth, batlMapWHeight))
 		return;
+
+	//Stat windows
+	sf::Text text_chName;
+	sf::Text text_enName;
+
+	sf::Font font;
+	font.loadFromFile("DancingScript-Regular.ttf");
+
+	// select the font
+	text_chName.setFont(font); // font is a sf::Font
+						// set the string to display
+	text_chName.setString(character->getStats());
+	// set the character size
+	text_chName.setCharacterSize(24); // in pixels, not points!
+
+	text_chName.setPosition(30.0f, 0.0f);
+
+	text_enName.setFont(font);
+	text_enName.setString(enemy->getStats());
+	text_enName.setCharacterSize(24);
+	text_enName.setPosition(window->getSize().x -200.0f, 0.0f);
+	//...
+	//Show Attack and Potion list Text
+	string actionMatrix[10][10];
+	actionMatrix[0][0] = "attack";
+
+	for (int i = 0; i < 10; i++)
+	{
+		for (int j = 0; j < 10; j++)
+		{
+			if (i != 0 && j != 0)
+			{
+				if (i * 10 + j < character->potionList_Size)
+				{
+					actionMatrix[i][j] = character->potionList[i * 10 + j].name;
+				}
+
+			}
+		}
+	}
+
+	//list of Text sprites containing the actions. Color or outline the current selected Action
 
 	while (window->isOpen())
 	{
@@ -83,6 +122,12 @@ void battleStart(sf::RenderWindow* window, CharacterModel *enemy, CharacterModel
 		window->draw(battleMap);
 		window->draw(*(character->shape));
 		window->draw(*(enemy->shape));
+
+		//Stat sections
+		window->draw(text_chName);
+		window->draw(text_enName);
+
+		
 
 		window->display();
 
