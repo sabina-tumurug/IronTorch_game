@@ -15,6 +15,13 @@
 //////////////
 using namespace std;
 
+struct potionAction{
+	sf::Text text;
+	//text.setString("N\A");
+	Potion *potion;
+	bool isAttack = false;
+};
+
 //Encoutered an enemy. Be ready to battleeeeeeeee
 //'Can put battleWindowFileName as a <declare>
 void battleStart(sf::RenderWindow* window, CharacterModel *enemy, CharacterModel* character)
@@ -35,8 +42,8 @@ void battleStart(sf::RenderWindow* window, CharacterModel *enemy, CharacterModel
 	enemy->orientSpriteToLeft();
 
 	//x=6;y=4
-	character->shape->setPosition( (batlMapWidth / 4 + 1) * batlTileHeight, (batlMapWHeight / 2 - 1) * batlTileWidth);
-	enemy->shape->setPosition((batlMapWidth - (batlMapWidth / 4 + 1)) * batlTileHeight, (batlMapWHeight / 2 - 1) * batlTileWidth);
+	character->shape->setPosition( (batlMapWidth / 4 + 1) * batlTileWidth, (batlMapWHeight / 2 - 1) * batlTileHeight);
+	enemy->shape->setPosition((batlMapWidth - (batlMapWidth / 4 + 1)) * batlTileWidth, (batlMapWHeight / 2 - 1) * batlTileHeight);
 
 	character->orientSpriteToRight();
 
@@ -71,7 +78,7 @@ void battleStart(sf::RenderWindow* window, CharacterModel *enemy, CharacterModel
 	text_chName.setString(character->getStats());
 	// set the character size
 	text_chName.setCharacterSize(24); // in pixels, not points!
-
+	//30.0f - x buffer
 	text_chName.setPosition(30.0f, 0.0f);
 
 	text_enName.setFont(font);
@@ -80,26 +87,50 @@ void battleStart(sf::RenderWindow* window, CharacterModel *enemy, CharacterModel
 	text_enName.setPosition(window->getSize().x -200.0f, 0.0f);
 	//...
 	//Show Attack and Potion list Text
-	string actionMatrix[10][10];
-	actionMatrix[0][0] = "attack";
+	/*string*/potionAction actionMatrix[3][3];
+	actionMatrix[0][0] = potionAction();
+	actionMatrix[0][0].text.setString("Attack");//"attack";
+	actionMatrix[0][0].text.setCharacterSize(20);
+	actionMatrix[0][0].text.setFont(font);
+	actionMatrix[0][0].text.setPosition(30.0f, (batlMapWHeight - 3)* batlTileHeight);
+	actionMatrix[0][0].isAttack = true;
 
-	for (int i = 0; i < 10; i++)
+	//Testing text Centering
+	//center text
+	sf::FloatRect textRect = actionMatrix[0][0].text.getLocalBounds();
+	actionMatrix[0][0].text.setOrigin(textRect.left + textRect.width / 2.0f,
+		textRect.top + textRect.height / 2.0f);
+	/*actionMatrix[0][0].text.setPosition(sf::Vector2f(SCRWIDTH / 2.0f, SCRHEIGHT / 2.0f))*/;
+	////////////////
+	int nrOfActions = 1;
+	for (int i = 0; i < 3; i++)
 	{
-		for (int j = 0; j < 10; j++)
+		for (int j = 0; j < 3; j++)
 		{
-			if (i != 0 && j != 0)
+			if (i + j != 0)
 			{
 				if (i * 10 + j < character->potionList_Size)
 				{
-					actionMatrix[i][j] = character->potionList[i * 10 + j].name;
+					actionMatrix[i][j] = potionAction();
+					actionMatrix[i][j].text.setString(character->potionList[i * 10 + j].name.substr(0, 13) + ".");
+					actionMatrix[i][j].potion = &(character->potionList[i * 10 + j]);
+					actionMatrix[i][j].text.setFont(font);
+					actionMatrix[i][j].text.setCharacterSize(20);
+					sf::FloatRect textRect = actionMatrix[i][j].text.getLocalBounds();
+					actionMatrix[i][j].text.setOrigin(textRect.left + textRect.width / 2.0f,
+						textRect.top + textRect.height / 2.0f);
+					//actionMatrix[i][j].text.setPosition((30.0f) + (j) * batlTileWidth, (batlMapWHeight - (3 - i)) * batlTileHeight);
+					nrOfActions++;
 				}
+				else
+					actionMatrix[i][j].text.setString("N/A");
 
 			}
 		}
 	}
 
-	//list of Text sprites containing the actions. Color or outline the current selected Action
-
+	int actionPointer = 0;
+	window->setKeyRepeatEnabled(true);
 	while (window->isOpen())
 	{
 		sf::Event event;
@@ -107,7 +138,54 @@ void battleStart(sf::RenderWindow* window, CharacterModel *enemy, CharacterModel
 		{
 			if (event.type == sf::Event::Closed)
 				window->close();
+			//Key events
+			if ((event.type == sf::Event::KeyPressed) && (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) ||
+				sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)))
+				/*if (event.key.code == sf::Keyboard::Key::A ||
+				event.key.code == sf::Keyboard::Key::Left)*/
+			{
+				if (actionPointer == 0)
+				{
+					actionPointer = nrOfActions - 1;
+				}
+				else if (actionPointer > 0) actionPointer--;
+			}
+			if ((event.type == sf::Event::KeyPressed) && (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) ||
+				sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down)))
+				/*if (event.key.code == sf::Keyboard::Key::S ||
+				event.key.code == sf::Keyboard::Key::Down)*/
+			{
+				if (actionPointer < 3 * 3 - 3 && actionPointer + 3 <= nrOfActions)
+					actionPointer += 3;
+			}
+
+			if ((event.type == sf::Event::KeyPressed) && (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) ||
+				sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)))
+				/*if (event.key.code == sf::Keyboard::Key::D ||
+				event.key.code == sf::Keyboard::Key::Right)*/
+			{
+				if (actionPointer == nrOfActions)
+				{
+					actionPointer = 0;
+				}
+				else if (actionPointer < nrOfActions - 1) actionPointer++;
+
+			}
+			if ((event.type == sf::Event::KeyPressed) && (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) ||
+				sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up)))
+				/*if (event.key.code == sf::Keyboard::Key::W ||
+				event.key.code == sf::Keyboard::Key::Up)*/
+			{
+				if (actionPointer >= 3)
+				{
+					actionPointer -= 3;
+				}
+
+			}
+
 		}
+
+
 		/*sf::RectangleShape testShape(sf::Vector2f(20, 20));
 		testShape.setPosition(10, 10);
 		testShape.setFillColor(sf::Color::Green);*/
@@ -115,7 +193,7 @@ void battleStart(sf::RenderWindow* window, CharacterModel *enemy, CharacterModel
 
 
 		//double the proportions of the sprite
-		character->loadToFile();
+		//character->loadToFile();
 		
 		window->clear();
 		
@@ -126,8 +204,40 @@ void battleStart(sf::RenderWindow* window, CharacterModel *enemy, CharacterModel
 		//Stat sections
 		window->draw(text_chName);
 		window->draw(text_enName);
+		for (int i = 0; i < 3; i++)
+		{
+			for (int j = 0; j < 3; j++)
+			{
+				if (actionMatrix[i][j].text.getString() != "N/A")
+				{
+					sf::RectangleShape sh(sf::Vector2f(batlTileWidth * 2, batlTileHeight));
 
-		
+					sh.setPosition(/*(30.0f) + */(j * 2)* batlTileWidth, (batlMapWHeight - (3 - i)) * batlTileHeight);
+					actionMatrix[i][j].text.setPosition((sh.getPosition().x * 2 + sh.getSize().x) / 2, (sh.getPosition().y * 2 + sh.getSize().y) / 2);
+
+					//sh.setFillColor(sf::Color::Color(100, 100, 100*j, 100));
+					//window->draw(sh);
+					if (actionPointer == i * 3 + j)
+					{
+						actionMatrix[i][j].text.setFillColor(sf::Color::Yellow);
+						actionMatrix[i][j].text.setOutlineColor(sf::Color::Red);
+						actionMatrix[i][j].text.setOutlineThickness(1.0f);
+					}
+					else
+					{
+						actionMatrix[i][j].text.setFillColor(sf::Color::White);
+						actionMatrix[i][j].text.setOutlineColor(sf::Color::Black);
+						actionMatrix[i][j].text.setOutlineThickness(0.0f);
+					}
+					window->draw(actionMatrix[i][j].text);
+				}
+				//sf::RectangleShape sh(sf::Vector2f(batlTileWidth * 2, batlTileHeight));
+				
+				
+			}
+				
+		}
+
 
 		window->display();
 
@@ -142,7 +252,9 @@ void battleStart(sf::RenderWindow* window, CharacterModel *enemy, CharacterModel
 
 	}
 
-	
+	//VERY IMPORTANT!!!! 
+	//window->setKeyRepeatEnabled(true);
+
 }
 
 //TODO: to be implemented with G_Unit
@@ -327,6 +439,12 @@ int main()
 	Irondhul_Ch.shape = &Irondhul;
 	Irondhul_Ch.setSpritePath_Left(IrondhulLeftTexture_path);
 	Irondhul_Ch.setSpritePath_Right(IrondhulRightTexture_path);
+
+	//Giving Irondhul some potions
+	Potion p1 = Potion("Potion of Heath", 10, 0, 0, 0, 0);
+	Potion p2 = Potion("Potion of Strength", 0, 5, 0, 0, 0);
+	Irondhul_Ch.addPotion(p1);
+	Irondhul_Ch.addPotion(p2);
 
 
 	//Enemies
