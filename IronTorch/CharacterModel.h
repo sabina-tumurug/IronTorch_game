@@ -16,8 +16,8 @@ private:
 	float attack, defence;
 	int strenght, agility, inteligence, endurance;
 
-	std::string ID;
-
+	//std::string ID;
+	int id;
 	void incrStrenght(int);
 	void incrAgility(int);
 	void incrInteligence(int);
@@ -36,17 +36,19 @@ public:
 	int potionList_Size;
 	sf::RectangleShape* shape;
 	bool isDead;
-
-	
+	static int currentId;
 
 	sf::Texture spriteTexture_left;
 	sf::Texture spriteTexture_right;
 
-	CharacterModel(std::string id,std::string name);
-	CharacterModel();
-	std::string getID();
+
+
+	CharacterModel(std::string id, std::string name); /*: id(current_id++) {}*/
+	CharacterModel()/*:id(current_id++) {}*/;
+	int getId();
 
 	int getHP();
+	
 	float getAttack();
 	float getDefence();
 	void incrAttribute(std::string, int);
@@ -69,7 +71,10 @@ public:
 	void setSpritePath_Right(std::string);
 	std::string getSpritePath_Right();
 	std::string getStats();
+	void setHP(int);
+
 	//DELETE FILES WHEN DECONSTRUCTING
 	~CharacterModel();
 };
+//int CharacterModel::currentId = 0;
 
