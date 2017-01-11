@@ -42,7 +42,7 @@ float G_Unit::getArea()
 bool G_Unit::containsNPC()
 {
 	if (NPC == nullptr || NPC == NULL) return false;
-	return true;
+	return !NPC->isDead;
 }
 
 CharacterModel * G_Unit::getNPC()

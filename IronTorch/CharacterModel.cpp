@@ -3,44 +3,31 @@
 void CharacterModel::incrStrenght(int incr)
 {
 	strenght += incr;
-	attack = strenght / 2 + inteligence / 2 + 5;
+	attack = strenght / 2 + inteligence / 2 + 6;
 }
 
 void CharacterModel::incrAgility(int incr)
 {
 	agility += incr;
-	defence = agility / 2 + endurance / 2 + 5;
+	defence = agility / 2 + endurance / 2 + 6;
 }
 
 void CharacterModel::incrInteligence(int incr)
 {
 	inteligence += incr;
-	attack = strenght / 2 + inteligence / 2 + 5;
+	attack = strenght / 2 + inteligence / 2 + 6;
 }
 
 void CharacterModel::incrEndurance(int incr)
 {
 	endurance += incr;
-	defence = agility / 2 + endurance / 2 + 5;
+	defence = agility / 2 + endurance / 2 + 6;
 }
 
-/*
-//HP = Strenght & Endurance
-int hp;
-//Attack = Strenght & Inteligence
-//Defence = Agility & Endurance
-float attack, defence;
-int strenght, agility, inteligence, endurance;
-
-public:
-std::string name;
-Potion potionList[100];
-int potionList_Size;
-*/
-CharacterModel::CharacterModel(std::string id, std::string chName)
+CharacterModel::CharacterModel(std::string id, std::string chName) : id(currentId++)
 {
 	name = chName;
-	ID = id;
+	//ID = id;
 	hp = 100;
 	attack = 10.0f;
 	defence = 10.0f;
@@ -54,12 +41,14 @@ CharacterModel::CharacterModel(std::string id, std::string chName)
 	isDead = false;
 	spriteTexture_left = (sf::Texture());
 	spriteTexture_right = (sf::Texture());
+
+	//current_id++;
 }
 
-CharacterModel::CharacterModel()
+CharacterModel::CharacterModel() : id(currentId++)
 {
 	name = "n/a";
-	ID = -1;
+	//ID = -1;
 	hp = 100;
 	attack = 10.0f;
 	defence = 10.0f;
@@ -75,15 +64,17 @@ CharacterModel::CharacterModel()
 	spriteTexture_right = (sf::Texture());
 }
 
-std::string CharacterModel::getID()
+int CharacterModel::getId()
 {
-	return ID;
+	return id;
 }
 
 int CharacterModel::getHP()
 {
 	return hp;
 }
+
+
 
 float CharacterModel::getAttack()
 {
@@ -170,10 +161,11 @@ int CharacterModel::getPotionPositionByID(int potionID)
 
 void CharacterModel::removePotionAtPosition(int potionPosition)
 {
-	for (int i = potionPosition; i < potionList_Size; i++)
+	for (int i = potionPosition; i < potionList_Size - 1; i++)
 	{
 		potionList[i] = potionList[i + 1];
 	}
+	potionList.pop_back();
 	potionList_Size--;
 }
 
@@ -183,9 +175,11 @@ float CharacterModel::combat_attack()
 	return attack;
 }
 
+
 float CharacterModel::combat_defend(float attackPow)
 {
-	float dmg = defence - attack;
+	//TODO: come with a better damage system (taking in consideration the other attributes)
+	float dmg = attack - (0.5f)  * defence;
 
 	hp -= dmg;
 	return dmg; 
@@ -228,7 +222,7 @@ CharacterModel CharacterModel::loadFromFile(std::string filePath)
 				}
 				else if (mapKey == "id")
 				{
-					result.ID = std::stoi(mapVal);
+					result.id = std::stoi(mapVal);
 				}
 				else if (mapKey == "attack")
 				{
@@ -367,6 +361,8 @@ CharacterModel CharacterModel::loadFromFile(std::string filePath)
 								}
 								//add to Character Potion List
 								result.addPotion(newPotion);
+								//remove potion from list
+								listString = listString.substr(endPotion, listString.size() - potionStr.size());
 							}
 						}
 						result.potionList_Size = result.potionList.size();
@@ -399,13 +395,13 @@ void CharacterModel::loadToFile()
 {
 	std::ofstream chStream;
 
-	chStream.open("" + ID + ".txt");
+	chStream.open("Character-" + std::to_string(id) + ".txt");
 	if (chStream.is_open())
 	{
 		chStream.clear();
 		//std::string idAtt = "id=" + ID + "\n";
 		//chStream.write("id=" + std::to_string(ID) + "\n", );
-		chStream << "id=" << ID << std::endl;
+		chStream << "id=" << std::to_string(id) << std::endl;
 		chStream << "name=" << name << std::endl;
 		chStream << "hp=" << std::to_string(hp) << std::endl;
 		chStream << "attack=" << std::to_string(attack) << std::endl;
@@ -518,4 +514,10 @@ std::string CharacterModel::getStats()
 
 CharacterModel::~CharacterModel()
 {
+}
+
+void CharacterModel::setHP(int newHp)
+{
+	hp = newHp;
+		 
 }

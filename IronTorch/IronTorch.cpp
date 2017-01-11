@@ -14,7 +14,8 @@
 #include <Windows.h>
 //////////////
 using namespace std;
-
+int CharacterModel::currentId = 0;
+int Potion::current_id = 0;
 struct potionAction{
 	sf::Text text;
 	//text.setString("N\A");
@@ -33,12 +34,15 @@ void battleStart(sf::RenderWindow* window, CharacterModel *enemy, CharacterModel
 	//{
 	//	battleWin_File.close();
 	//}
+	float oldChPos_X = character->shape->getPosition().x;
+	float oldChPos_Y = character->shape->getPosition().y;
+
 	int batlTileWidth = 60;
 	int batlTileHeight = 60;
 
 	int batlMapWidth = 20;
 	int batlMapWHeight = 10;
-
+	character->loadToFile();
 	enemy->orientSpriteToLeft();
 
 	//x=6;y=4
@@ -109,11 +113,11 @@ void battleStart(sf::RenderWindow* window, CharacterModel *enemy, CharacterModel
 		{
 			if (i + j != 0)
 			{
-				if (i * 10 + j < character->potionList_Size)
+				if (i * 3 + j <= character->potionList_Size)
 				{
 					actionMatrix[i][j] = potionAction();
-					actionMatrix[i][j].text.setString(character->potionList[i * 10 + j].name.substr(0, 13) + ".");
-					actionMatrix[i][j].potion = &(character->potionList[i * 10 + j]);
+					actionMatrix[i][j].text.setString(character->potionList[i * 3 + j - 1].name.substr(0, 13) + ".");
+					actionMatrix[i][j].potion = &(character->potionList[i * 3 + j - 1]);
 					actionMatrix[i][j].text.setFont(font);
 					actionMatrix[i][j].text.setCharacterSize(20);
 					sf::FloatRect textRect = actionMatrix[i][j].text.getLocalBounds();
@@ -131,7 +135,8 @@ void battleStart(sf::RenderWindow* window, CharacterModel *enemy, CharacterModel
 
 	int actionPointer = 0;
 	window->setKeyRepeatEnabled(true);
-	while (window->isOpen())
+	bool battleIsOver = false;;
+	while (window->isOpen() && !battleIsOver)
 	{
 		sf::Event event;
 		while (window->pollEvent(event))
@@ -164,7 +169,7 @@ void battleStart(sf::RenderWindow* window, CharacterModel *enemy, CharacterModel
 				/*if (event.key.code == sf::Keyboard::Key::D ||
 				event.key.code == sf::Keyboard::Key::Right)*/
 			{
-				if (actionPointer == nrOfActions)
+				if (actionPointer == nrOfActions - 1)
 				{
 					actionPointer = 0;
 				}
@@ -180,8 +185,60 @@ void battleStart(sf::RenderWindow* window, CharacterModel *enemy, CharacterModel
 				{
 					actionPointer -= 3;
 				}
-
 			}
+			if ((event.type == sf::Event::KeyPressed) && (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Return)))
+				/*if (event.key.code == sf::Keyboard::Key::W ||
+				event.key.code == sf::Keyboard::Key::Up)*/
+			{
+				potionAction selectedAction = actionMatrix[actionPointer / 3][actionPointer % 3];
+				if (selectedAction.isAttack)
+				{
+					//Attack
+					enemy->combat_defend(character->getAttack());
+					if (enemy->getHP() <= 0)
+					{
+						enemy->isDead = true;
+						battleIsOver = true;
+						break;
+
+					}
+				}
+				else {
+					character->usePotion(selectedAction.potion->id);
+					///////rearange Potions
+					for (int i = 0; i < 3; i++)
+					{
+						for (int j = 0; j < 3; j++)
+						{
+							if (i + j != 0)
+							{
+								if (i * 3 + j <= character->potionList_Size)
+								{
+									actionMatrix[i][j] = potionAction();
+									actionMatrix[i][j].text.setString(character->potionList[i * 3 + j - 1].name.substr(0, 13) + ".");
+									actionMatrix[i][j].potion = &(character->potionList[i * 3 + j - 1]);
+									actionMatrix[i][j].text.setFont(font);
+									actionMatrix[i][j].text.setCharacterSize(20);
+									sf::FloatRect textRect = actionMatrix[i][j].text.getLocalBounds();
+									actionMatrix[i][j].text.setOrigin(textRect.left + textRect.width / 2.0f,
+										textRect.top + textRect.height / 2.0f);
+									//actionMatrix[i][j].text.setPosition((30.0f) + (j) * batlTileWidth, (batlMapWHeight - (3 - i)) * batlTileHeight);
+									//nrOfActions++;
+								}
+								else
+									actionMatrix[i][j].text.setString("N/A");
+							}
+						}
+					}
+					nrOfActions--;
+					if (actionPointer = nrOfActions) actionPointer = nrOfActions - 1;
+					//////////////////////////
+				}
+				//Redraw character UI
+				text_chName.setString(character->getStats());
+				text_enName.setString(enemy->getStats());
+			}
+			///end-Key events
 
 		}
 
@@ -254,7 +311,8 @@ void battleStart(sf::RenderWindow* window, CharacterModel *enemy, CharacterModel
 
 	//VERY IMPORTANT!!!! 
 	//window->setKeyRepeatEnabled(true);
-
+	//character->loadFromFile("Character-" + std::to_string(character->getId()) + ".txt");
+	character->shape->setPosition(sf::Vector2f(oldChPos_X, oldChPos_Y));
 }
 
 //TODO: to be implemented with G_Unit
@@ -467,6 +525,7 @@ int main()
 
 	//zombie#1
 	CharacterModel z1 = CharacterModel("1","Zombie");
+	z1.setHP(15);
 	z1.shape = &zombie;
 	z1.shape->setPosition(sf::Vector2f(1150.0f, 120.0f));
 	z1.setSpritePath_Left("zombie(left).png");
@@ -475,6 +534,7 @@ int main()
 
 	//zombie#2
 	CharacterModel z2 = CharacterModel("2","Zombie");
+	z2.setHP(15);
 	z2.cloneShape(z1);
 	z2.setSpritePath_Left("zombie(left).png");
 	z2.setSpritePath_Right("zombie(right).png");
@@ -484,6 +544,7 @@ int main()
 
 	//zombie#3
 	CharacterModel z3 = CharacterModel("3","Zombie");
+	z3.setHP(15);
 	z3.cloneShape(z2);
 	z3.shape->setPosition(sf::Vector2f(130.0f, 240.0f));
 	z3.setSpritePath_Left("zombie(left).png");
@@ -492,6 +553,7 @@ int main()
 	
 	//zombie#4
 	CharacterModel z4 = CharacterModel("4","Zombie");
+	z4.setHP(15);
 	z4.cloneShape(z3);
 	z4.shape->setPosition(sf::Vector2f(310.0f, 240.0f));
 	z4.setSpritePath_Left("zombie(left).png");
@@ -500,6 +562,7 @@ int main()
 
 	//vampire#1
 	CharacterModel v1 = CharacterModel("5","Vampire");
+	v1.setHP(30);
 	v1.shape = &vampire;
 	v1.shape->setPosition(sf::Vector2f(310.0f, 420.0f));
 	v1.setSpritePath_Left("vampire(left).png");
@@ -508,6 +571,7 @@ int main()
 
 	//vampire#2
 	CharacterModel v2 = CharacterModel("6","Vampire");
+	v2.setHP(30);
 	v2.cloneShape(v1);
 	v2.shape->setPosition(sf::Vector2f(1030.0f, 180.0f));
 	v2.setSpritePath_Left("vampire(left).png");
@@ -516,6 +580,7 @@ int main()
 
 	//vampire#3
 	CharacterModel v3 = CharacterModel("7","Vampire");
+	v3.setHP(30);
 	v3.cloneShape(v2);
 	v3.shape->setPosition(sf::Vector2f(1030.0f, 300.0f));
 	v3.setSpritePath_Left("vampire(left).png");
@@ -524,6 +589,7 @@ int main()
 
 	//vampire#4
 	CharacterModel v4 = CharacterModel("8","Vampire");
+	v4.setHP(30);
 	v4.cloneShape(v3);
 	v4.shape->setPosition(sf::Vector2f(1150.0f, 420.0f));
 	v4.setSpritePath_Left("vampire(left).png");
