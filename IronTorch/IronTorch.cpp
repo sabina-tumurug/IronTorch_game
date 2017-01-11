@@ -9,6 +9,7 @@
 #include <fstream>
 #include <map>
 #include <iostream>
+#include "Chest.h"
 
 //for debuging
 #include <Windows.h>
@@ -16,6 +17,7 @@
 using namespace std;
 int CharacterModel::currentId = 0;
 int Potion::current_id = 0;
+int Chest::currentId = 0;
 struct potionAction{
 	sf::Text text;
 	//text.setString("N\A");
@@ -90,6 +92,18 @@ void battleStart(sf::RenderWindow* window, CharacterModel *enemy, CharacterModel
 	text_enName.setCharacterSize(24);
 	text_enName.setPosition(window->getSize().x -200.0f, 0.0f);
 	//...
+	//Dmg animation
+	sf::Texture dmgTexture;//claw-marks.png
+	dmgTexture.loadFromFile("claw-marks.png");
+	//Irondhul.setTexture(&IrondhulTextureLeft);
+	sf::RectangleShape dmgShape;
+	dmgShape.setSize(sf::Vector2f(50.0f, 50.0f));
+	dmgShape.setOrigin(dmgShape.getLocalBounds().left + dmgShape.getLocalBounds().width / 2.0f,
+		dmgShape.getLocalBounds().top + dmgShape.getLocalBounds().height / 2.0f);
+	dmgShape.setTexture(&dmgTexture);
+	//dmgShape.setRotation(45.0f);
+	//dmgShape.setFillColor(sf::Color::Red);
+
 	//Show Attack and Potion list Text
 	/*string*/potionAction actionMatrix[3][3];
 	actionMatrix[0][0] = potionAction();
@@ -135,10 +149,30 @@ void battleStart(sf::RenderWindow* window, CharacterModel *enemy, CharacterModel
 
 	int actionPointer = 0;
 	window->setKeyRepeatEnabled(true);
-	bool battleIsOver = false;;
+	bool battleIsOver = false;
+
+	bool dmgDone = false;
+	bool dmgToCh = false;
+	bool isEnemyTurn = false;
+
 	while (window->isOpen() && !battleIsOver)
 	{
 		sf::Event event;
+		if (isEnemyTurn)
+		{
+			//Attack
+			character->combat_defend(enemy->getAttack());
+			/*if (character->getHP() <= 0)
+			{
+				character->isDead = true;
+				battleIsOver = true;
+				break;
+			}*/
+			dmgDone = true;
+			dmgToCh = true;
+			isEnemyTurn = false;
+
+		}
 		while (window->pollEvent(event))
 		{
 			if (event.type == sf::Event::Closed)
@@ -195,13 +229,17 @@ void battleStart(sf::RenderWindow* window, CharacterModel *enemy, CharacterModel
 				{
 					//Attack
 					enemy->combat_defend(character->getAttack());
-					if (enemy->getHP() <= 0)
+					/*if (enemy->getHP() <= 0)
 					{
 						enemy->isDead = true;
 						battleIsOver = true;
 						break;
+					}*/
 
-					}
+					dmgDone = true;
+					dmgToCh = false;
+					isEnemyTurn = true;
+
 				}
 				else {
 					character->usePotion(selectedAction.potion->id);
@@ -295,7 +333,49 @@ void battleStart(sf::RenderWindow* window, CharacterModel *enemy, CharacterModel
 				
 		}
 
+		//show damage animation
 
+		if (dmgDone)
+		{
+			sf::Vector2f position = dmgToCh ? sf::Vector2f((character->shape->getPosition().x * 2 + character->shape->getSize().x) / 2, (character->shape->getPosition().y * 2 + character->shape->getSize().y) / 2) 
+											: sf::Vector2f((enemy->shape->getPosition().x * 2 + enemy->shape->getSize().x) / 2, (enemy->shape->getPosition().y * 2 + enemy->shape->getSize().y) / 2);
+			/*sf::RectangleShape sh(sf::Vector2f(batlTileWidth * 2, batlTileHeight));
+
+			sh.setPosition((j * 2)* batlTileWidth, (batlMapWHeight - (3 - i)) * batlTileHeight);
+			actionMatrix[i][j].text.setPosition((sh.getPosition().x * 2 + sh.getSize().x) / 2, (sh.getPosition().y * 2 + sh.getSize().y) / 2); */
+			
+			if (dmgToCh)
+				dmgShape.setRotation(180.0f);
+
+			dmgShape.setPosition(position);
+			dmgDone = false;
+			window->draw(dmgShape);
+
+			window->display();
+			Sleep(500);
+			if (dmgToCh)
+			{
+				dmgShape.setRotation(180.0f);
+
+				if (character->getHP() <= 0)
+				{
+					character->isDead = true;
+					battleIsOver = true;
+					break;
+				}
+			}
+			else
+			{
+				if (enemy->getHP() <= 0)
+				{
+					enemy->isDead = true;
+					battleIsOver = true;
+					break;
+				}
+			}
+
+
+		}else
 		window->display();
 
 		/*int test = 0;
@@ -618,11 +698,16 @@ int main()
 		2, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 	};
 	//dinamicly populate de matrix
+	Chest* chestList[10];
+	int chestListSize = 0;
+
 	for(int i = 0; i < mapSizeHeight; i++)
 		for (int j = 0; j < mapSizeWidth; j++)
 		{
 			int spriteType = level[j + (i * mapSizeWidth)];
 			G_Unit newG;// = G_Unit();
+			Chest chest;
+
 			switch (spriteType)
 			{
 				//0 = WALL
@@ -641,6 +726,11 @@ int main()
 				case 2:
 				{
 					newG = G_Unit(tileHeight, tileWidth, j * tileWidth, i * tileHeight, true, "");
+					chest = Chest();
+					//doesn't work ...it puts the same chest. FIX IT!!!
+					newG.chest = &chest;
+					chestList[chestListSize] = &chest;
+					chestListSize++;
 					break;
 				}
 				//3 = DOOR
@@ -667,6 +757,20 @@ int main()
 
 		g_unitMatrix[vct.x + (vct.y * 20)].setNPC(&npclist[i]/*&npcList2[i]*/);
 	}
+
+	//Edit Chests
+	for (int i = 0; i < chestListSize; i++)
+	{
+		Potion potion("Potion of health#" + to_string(i),
+			10,
+			0,
+			0,
+			0,
+			0);
+			chestList[i]->loot.push_back(potion);
+
+	}
+	chestList[0]->loot.at(0).name = "Potion Extra";
 
 	TileMap map;
 	if (!map.load("tileset.png", sf::Vector2u(tileWidth, tileHeight), level, mapSizeWidth, mapSizeHeight))
