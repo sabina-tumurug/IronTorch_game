@@ -1,9 +1,9 @@
 id=0
 name=Irondhul
-hp=10
-attack=13.000000
+hp=90
+attack=10.000000
 defence=10.000000
-strenght=10
+strenght=5
 agility=5
 inteligence=5
 endurance=5
@@ -12,6 +12,6 @@ spritePath_left=left.png
 spritePath_right=right.png
 sprite_width=40
 sprite_height=50
-sprite_positionX1141
-sprite_positionY180.088
-potions=[]
+sprite_positionX259.942
+sprite_positionY420.002
+potions=[{id=0;name=Potion of Heath;effectHP=10;effectStrenght=0;effectAgility=0;effectInteligence=0;effectEndurance=0;}{id=1;name=Potion of Strength;effectHP=0;effectStrenght=5;effectAgility=0;effectInteligence=0;effectEndurance=0;}]

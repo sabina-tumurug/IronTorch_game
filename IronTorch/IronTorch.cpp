@@ -729,7 +729,7 @@ int main()
 	//chestSh.setPosition(sf::Vector2f(7 * tileWidth + tileWidth / 2, 7 * tileHeight + tileHeight / 2)); 
 
 	chest1.shape = &chestSh;
-
+	
 
 	//chest1.addLoot();
 	Chest chest2;
@@ -740,7 +740,9 @@ int main()
 	Chest chest3;
 	chest3.cloneShape(chest2);
 	//chest3.shape->setPosition(sf::Vector2f(0 * tileWidth + tileWidth / 2, tileHeight * 7 + tileHeight / 2)); 
-
+	//for testing
+	chest3.isPrimaryKey = true;
+	//////////////////
 	Chest chest4;
 	chest4.cloneShape(chest3);
 	//chest4.shape->setPosition(sf::Vector2f(0 * tileWidth + tileWidth / 2, tileHeight * 9 + tileHeight / 2));
@@ -775,7 +777,9 @@ int main()
 	doorShape.setOrigin(doorShape.getLocalBounds().left + doorShape.getLocalBounds().width / 2.0f,
 		doorShape.getLocalBounds().top + doorShape.getLocalBounds().height / 2.0f);
 	door1.shape = &doorShape;
-
+	//testing 
+	door1.isBossDoor = true;
+	////////////////
 	Door door2;
 	door2.cloneShape(door1);
 	//chest2.shape->setPosition(sf::Vector2f(13 * tileWidth + tileWidth / 2, tileHeight * 5 + tileHeight / 2));
@@ -823,7 +827,7 @@ int main()
 				case 3:
 				{
 					newG = G_Unit(tileHeight, tileWidth, j * tileWidth, i * tileHeight, false, "");
-					doorList[doorListSize].shape->setPosition(j * tileWidth + tileWidth / 2, i * tileHeight + tileHeight / 2);
+					doorList[doorListCursor].shape->setPosition(j * tileWidth + tileWidth / 2, i * tileHeight + tileHeight / 2);
 					newG.door = &doorList[doorListCursor];
 					doorListCursor++;
 
@@ -912,7 +916,7 @@ int main()
 		{
 			if (allowMovement(Irondhul, 0.f, -0.1f, windowWidth, windowHeight))
 			{
-				if (CollisionDetection(&Irondhul_Ch, 0.f, -0.1f, /*level*/ g_unitMatrix, /*, npclist, npcCount*/, mapSizeHeight * mapSizeWidth, &window))
+				if (CollisionDetection(&Irondhul_Ch, 0.f, -0.1f, /*level*/ g_unitMatrix, mapSizeHeight * mapSizeWidth, &window))
 				{
 					Irondhul.move(0.0f, -0.1f);
 				}
@@ -941,7 +945,6 @@ int main()
 		{
 			window.draw(*doorList[i].shape);
 		}
-		//window.draw(*chestList[1].shape);
 		///////////////////
 		window.draw(Irondhul);
 		window.display();
