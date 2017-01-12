@@ -18,6 +18,7 @@ using namespace std;
 int CharacterModel::currentId = 0;
 int Potion::current_id = 0;
 int Chest::currentId = 0;
+
 struct potionAction{
 	sf::Text text;
 	//text.setString("N\A");
@@ -419,8 +420,19 @@ bool seeWhatIntersectsIntersects(CharacterModel* character, float point_X, float
 		battleStart(window, enemy/*, CharacterModel *enemy*/, character);
 
 		intersectingSprite.deleteNPC();
+	}else
+		if (intersectingSprite.containsChest())
+		{
+			Chest* chest = intersectingSprite.getLoot();
+			
+			//chest->loot;
 
-	}
+			for (int i = 0; i < chest->loot.size(); i++)
+			{
+				character->addPotion(chest->loot[i]);
+			}
+			intersectingSprite.chest->setChestToOpen();
+		}
 
 	return intersectingSprite.IsBackground;
 }
@@ -698,15 +710,62 @@ int main()
 		2, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 	};
 	//dinamicly populate de matrix
-	Chest* chestList[10];
-	int chestListSize = 0;
+	//Chest chestList[10];
+
+	//Edit Chests
+	Chest chest1;
+	sf::RectangleShape chestSh(sf::Vector2f(70.0f, 50.0f));
+	sf::Texture chestTexture;
+	chestTexture.loadFromFile("chest-close.png");
+	chestSh.setTexture(&chestTexture);
+	chestSh.setOrigin(chestSh.getLocalBounds().left + chestSh.getLocalBounds().width / 2.0f,
+		chestSh.getLocalBounds().top + chestSh.getLocalBounds().height / 2.0f);
+	//chestSh.setPosition(sf::Vector2f(7 * tileWidth + tileWidth / 2, 7 * tileHeight + tileHeight / 2)); 
+
+	chest1.shape = &chestSh;
+
+
+	//chest1.addLoot();
+	Chest chest2;
+	chest2.cloneShape(chest1);
+	//chest2.shape->setPosition(sf::Vector2f(13 * tileWidth + tileWidth / 2, tileHeight * 5 + tileHeight / 2));
+
+
+	Chest chest3;
+	chest3.cloneShape(chest2);
+	//chest3.shape->setPosition(sf::Vector2f(0 * tileWidth + tileWidth / 2, tileHeight * 7 + tileHeight / 2)); 
+
+	Chest chest4;
+	chest4.cloneShape(chest3);
+	//chest4.shape->setPosition(sf::Vector2f(0 * tileWidth + tileWidth / 2, tileHeight * 9 + tileHeight / 2));
+
+	Chest chestList[] =
+	{
+		chest1,chest2,chest3,chest4
+	};
+
+	int chestListSize = 4;
+
+	for (int i = 0; i < chestListSize; i++)
+	{
+		Potion potion("Potion of health#" + to_string(i),
+			10,
+			0,
+			0,
+			0,
+			0);
+		chestList[i].loot.push_back(potion);
+
+	}
+	chestList[0].loot.at(0).name = "Potion Extra";
+	int chestCursor = 0;
 
 	for(int i = 0; i < mapSizeHeight; i++)
 		for (int j = 0; j < mapSizeWidth; j++)
 		{
 			int spriteType = level[j + (i * mapSizeWidth)];
 			G_Unit newG;// = G_Unit();
-			Chest chest;
+			//Chest chest;
 
 			switch (spriteType)
 			{
@@ -726,11 +785,9 @@ int main()
 				case 2:
 				{
 					newG = G_Unit(tileHeight, tileWidth, j * tileWidth, i * tileHeight, true, "");
-					chest = Chest();
-					//doesn't work ...it puts the same chest. FIX IT!!!
-					newG.chest = &chest;
-					chestList[chestListSize] = &chest;
-					chestListSize++;
+					chestList[chestCursor].shape->setPosition(j * tileWidth + tileWidth / 2, i * tileHeight + tileHeight / 2);
+					newG.chest = &chestList[chestCursor];
+					chestCursor++;
 					break;
 				}
 				//3 = DOOR
@@ -752,25 +809,11 @@ int main()
 
 		vct.x = npclist[i].shape->getPosition().x / 60;
 		vct.y = npclist[i].shape->getPosition().y / 60;
-		/*vct.x = npcList2[i].shape->getPosition().x / 60;
-		vct.y = npcList2[i].shape->getPosition().y / 60;*/
 
 		g_unitMatrix[vct.x + (vct.y * 20)].setNPC(&npclist[i]/*&npcList2[i]*/);
 	}
 
-	//Edit Chests
-	for (int i = 0; i < chestListSize; i++)
-	{
-		Potion potion("Potion of health#" + to_string(i),
-			10,
-			0,
-			0,
-			0,
-			0);
-			chestList[i]->loot.push_back(potion);
 
-	}
-	chestList[0]->loot.at(0).name = "Potion Extra";
 
 	TileMap map;
 	if (!map.load("tileset.png", sf::Vector2u(tileWidth, tileHeight), level, mapSizeWidth, mapSizeHeight))
@@ -856,6 +899,14 @@ int main()
 		}
 		///////////////////
 
+		//window.draw(*chestList[1].shape);
+		//Draw chests
+		for (int i = 0; i < chestListSize; i++)
+		{
+			window.draw(*chestList[i].shape);
+		}
+		//window.draw(*chestList[1].shape);
+		///////////////////
 		window.draw(Irondhul);
 		window.display();
 	}

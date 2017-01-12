@@ -167,6 +167,8 @@
     <ClCompile Include="TileMap.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="chest-close.png" />
+    <Image Include="chest_open.png" />
     <Image Include="claw-marks.png" />
     <Image Include="death.png" />
     <Image Include="left.png" />
@@ -183,6 +185,10 @@
   <ItemGroup>
     <Media Include="boss_song.wav" />
     <Media Include="theme_song.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="DancingScript-Bold.ttf" />
+    <Font Include="DancingScript-Regular.ttf" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

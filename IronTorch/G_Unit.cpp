@@ -11,6 +11,7 @@ G_Unit::G_Unit()
 	IsBackground = false;
 
 	NPC = nullptr;
+	chest = nullptr;
 
 }
 
@@ -24,6 +25,7 @@ G_Unit::G_Unit(float newHeight, float newWidth, float newPosition_x, float newPo
 	IsBackground = newIsBackground;
 
 	NPC = nullptr;
+	chest = nullptr;
 }
 
 bool G_Unit::isColiding(float pos_x, float pos_y)
@@ -38,6 +40,12 @@ float G_Unit::getArea()
 }
 
 
+
+Chest * G_Unit::getLoot()
+{
+	chest->isEmpty = true;
+	return chest;
+}
 
 bool G_Unit::containsNPC()
 {
@@ -60,6 +68,12 @@ void G_Unit::deleteNPC()
 	//delete NPC; //freed memory
 	NPC->isDead = true;
 	NPC = NULL;
+}
+
+bool G_Unit::containsChest()
+{
+	if (chest == nullptr || chest == NULL) return false;
+	else return !chest->isEmpty;
 }
 
 G_Unit::~G_Unit()

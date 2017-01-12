@@ -19,10 +19,13 @@ public:
 	bool isColiding(float, float);
 	float getArea();
 
+	Chest* getLoot();
 	bool containsNPC();
 	CharacterModel* getNPC();
 	void setNPC(CharacterModel*);
 	void deleteNPC();
+	bool containsChest();
+
 	~G_Unit();
 };
 
