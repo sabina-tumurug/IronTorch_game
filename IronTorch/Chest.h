@@ -11,6 +11,7 @@ public:
 	static int currentId;
 	sf::RectangleShape* shape;
 	std::vector<Potion> loot;
+	bool isPrimaryKey;
 
 	bool isEmpty;
 

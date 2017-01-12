@@ -10,6 +10,7 @@
 #include <map>
 #include <iostream>
 #include "Chest.h"
+#include "Door.h"
 
 //for debuging
 #include <Windows.h>
@@ -18,6 +19,7 @@ using namespace std;
 int CharacterModel::currentId = 0;
 int Potion::current_id = 0;
 int Chest::currentId = 0;
+int Door::currentId = 0;
 
 struct potionAction{
 	sf::Text text;
@@ -397,7 +399,7 @@ void battleStart(sf::RenderWindow* window, CharacterModel *enemy, CharacterModel
 }
 
 //TODO: to be implemented with G_Unit
-bool seeWhatIntersectsIntersects(CharacterModel* character, float point_X, float point_Y,/* const int levelTileMap[]*/ G_Unit gMatrix[200]/*, CharacterModel *enList, int enListCount*/, sf::RenderWindow *window)
+bool seeWhatIntersectsIntersects(CharacterModel* character, float point_X, float point_Y, G_Unit gMatrix[200],int gMatrixLenght, sf::RenderWindow *window)
 {
 	//Get retangle
 	//*************
@@ -425,19 +427,39 @@ bool seeWhatIntersectsIntersects(CharacterModel* character, float point_X, float
 		{
 			Chest* chest = intersectingSprite.getLoot();
 			
-			//chest->loot;
-
+			//chest->loot
 			for (int i = 0; i < chest->loot.size(); i++)
 			{
 				character->addPotion(chest->loot[i]);
 			}
 			intersectingSprite.chest->setChestToOpen();
+
+			if (chest->isPrimaryKey)
+			{
+				for (int d = 0; d < gMatrixLenght; d++)
+				{
+					if (gMatrix[d].door != nullptr)
+					{
+						if (gMatrix[d].door->isBossDoor)
+						{
+							//gMatrix[d].door->isOpen = true;
+							gMatrix[d].door->openDoor();
+						}
+					}
+				}
+			}
+		}
+		else {
+			if (intersectingSprite.containsOpenDoor())
+			{
+				return true;
+			}
 		}
 
 	return intersectingSprite.IsBackground;
 }
 //levelG_UnitMap to be changed from int[] ~> G_Unit[]
-bool CollisionDetection(/*sf::RectangleShape &obj*/CharacterModel *character, float moveX, float moveY, /*const int levelG_UnitMap[]*/ G_Unit gMatrix[200]/*, CharacterModel *enList, int enListCount*/, sf::RenderWindow *window)
+bool CollisionDetection(CharacterModel *character, float moveX, float moveY, G_Unit gMatrix[200], int gMatrixLenght, sf::RenderWindow *window)
 {
 	//sf::RectangleShape obj = character->shape;
 	bool token_result = false;
@@ -445,19 +467,19 @@ bool CollisionDetection(/*sf::RectangleShape &obj*/CharacterModel *character, fl
 	sf::Vector2f objPoz = character->shape->getPosition();
 	sf::Vector2f objSize = character->shape->getSize();
 	//1.Get upper left corner
-	token_result = seeWhatIntersectsIntersects(character, objPoz.x + moveX, objPoz.y + moveY, /*levelG_UnitMap*/gMatrix/*, enList, enListCount*/, window);
+	token_result = seeWhatIntersectsIntersects(character, objPoz.x + moveX, objPoz.y + moveY, /*levelG_UnitMap*/gMatrix/*, enList, enListCount*/, gMatrixLenght, window);
 	if (!token_result)
 		return false;
 	//2.Get upper right corner
-	token_result = seeWhatIntersectsIntersects(character, objPoz.x + moveX + objSize.x, objPoz.y + moveY, /*levelG_UnitMap*/gMatrix/*, enList, enListCount*/, window);
+	token_result = seeWhatIntersectsIntersects(character, objPoz.x + moveX + objSize.x, objPoz.y + moveY, /*levelG_UnitMap*/gMatrix/*, enList, enListCount*/, gMatrixLenght, window);
 	if (!token_result)
 		return false;
 	//3.Get lower left corner
-	token_result = seeWhatIntersectsIntersects(character, objPoz.x + moveX, objPoz.y + moveY + objSize.y, /*levelG_UnitMap*/gMatrix/*, enList, enListCount*/, window);
+	token_result = seeWhatIntersectsIntersects(character, objPoz.x + moveX, objPoz.y + moveY + objSize.y, /*levelG_UnitMap*/gMatrix/*, enList, enListCount*/, gMatrixLenght, window);
 	if (!token_result)
 		return false;
 	//4.Get lower right corner
-	token_result = seeWhatIntersectsIntersects(character, objPoz.x + moveX + objSize.x, objPoz.y + moveY + objSize.y, /*levelG_UnitMap*/gMatrix/*, enList, enListCount*/, window);
+	token_result = seeWhatIntersectsIntersects(character, objPoz.x + moveX + objSize.x, objPoz.y + moveY + objSize.y, /*levelG_UnitMap*/gMatrix/*, enList, enListCount*/, gMatrixLenght, window);
 	if (!token_result)
 		return false;
 
@@ -494,22 +516,6 @@ bool allowMovement(sf::RectangleShape &obj, float moveX, float moveY, float wind
 	//go ahead, Mr.Sprite
 	return true;
 }
-
-///////Experiment
-//void orientSpriteToLeft(CharacterModel *ch)
-//{
-//	//sf::Texture textureLeft;
-//	//textureLeft.loadFromFile(ch->spritePath_left);
-//	//ch->shape->setTexture(&textureLeft);
-//}
-//
-//void orientSpriteToRight(CharacterModel *ch)
-//{
-//	//sf::Texture textureRight;
-//	//textureRight.loadFromFile(ch->spritePath_right);
-//	///ch->shape->setTexture(&textureRight);
-//}
-//////////////////////
 
 int main()
 {
@@ -759,7 +765,30 @@ int main()
 	}
 	chestList[0].loot.at(0).name = "Potion Extra";
 	int chestCursor = 0;
+	////////////////////////////////////////////////////////
+	//Edit doors
+	Door door1;
+	sf::RectangleShape doorShape(sf::Vector2f(tileWidth, tileHeight));
+	sf::Texture doorTexture;
+	doorTexture.loadFromFile("door-closed.png");
+	doorShape.setTexture(&doorTexture);
+	doorShape.setOrigin(doorShape.getLocalBounds().left + doorShape.getLocalBounds().width / 2.0f,
+		doorShape.getLocalBounds().top + doorShape.getLocalBounds().height / 2.0f);
+	door1.shape = &doorShape;
 
+	Door door2;
+	door2.cloneShape(door1);
+	//chest2.shape->setPosition(sf::Vector2f(13 * tileWidth + tileWidth / 2, tileHeight * 5 + tileHeight / 2));
+
+	Door doorList[] =
+	{
+		door1,door2
+	};
+
+	int doorListSize = 2;
+	int doorListCursor = 0;
+
+	/////////////////////////
 	for(int i = 0; i < mapSizeHeight; i++)
 		for (int j = 0; j < mapSizeWidth; j++)
 		{
@@ -794,6 +823,10 @@ int main()
 				case 3:
 				{
 					newG = G_Unit(tileHeight, tileWidth, j * tileWidth, i * tileHeight, false, "");
+					doorList[doorListSize].shape->setPosition(j * tileWidth + tileWidth / 2, i * tileHeight + tileHeight / 2);
+					newG.door = &doorList[doorListCursor];
+					doorListCursor++;
+
 					break;
 				}
 			default:
@@ -835,7 +868,7 @@ int main()
 			//battleStart(&window, "battle-tileSet.png");
 			if (allowMovement(Irondhul, -0.1f, 0.0f, windowWidth, windowHeight))
 			{
-				if (CollisionDetection(&Irondhul_Ch, -0.1f, 0.0f, /*level*/ g_unitMatrix/*, npclist, npcCount*/, &window))
+				if (CollisionDetection(&Irondhul_Ch, -0.1f, 0.0f, /*level*/ g_unitMatrix/*, npclist, npcCount*/, mapSizeHeight * mapSizeWidth, &window))
 				{
 					Irondhul.move(-0.1f, 0.0f);
 					Irondhul.setTexture(&IrondhulTextureLeft);
@@ -851,7 +884,7 @@ int main()
 		{
 			if (allowMovement(Irondhul, 0.0f, 0.1f, windowWidth, windowHeight))
 			{
-				if (CollisionDetection(&Irondhul_Ch, 0.0f, 0.1f, /*level*/ g_unitMatrix/*, npclist, npcCount*/,&window))
+				if (CollisionDetection(&Irondhul_Ch, 0.0f, 0.1f, g_unitMatrix, mapSizeHeight * mapSizeWidth, &window))
 				{
 					Irondhul.move(0.0f, 0.1f);
 				}
@@ -864,7 +897,7 @@ int main()
 		{
 			if (allowMovement(Irondhul, 0.1f, 0.0f, windowWidth, windowHeight))
 			{
-				if (CollisionDetection(&Irondhul_Ch, 0.1f, 0.0f, /*level*/ g_unitMatrix/*, npclist, npcCount*/, &window))
+				if (CollisionDetection(&Irondhul_Ch, 0.1f, 0.0f, g_unitMatrix, mapSizeHeight * mapSizeWidth, &window))
 				{
 					Irondhul.move(0.1f, 0.0f);
 					Irondhul.setTexture(&IrondhulTextureRight);
@@ -879,11 +912,10 @@ int main()
 		{
 			if (allowMovement(Irondhul, 0.f, -0.1f, windowWidth, windowHeight))
 			{
-				if (CollisionDetection(&Irondhul_Ch, 0.f, -0.1f, /*level*/ g_unitMatrix/*, npclist, npcCount*/, &window))
+				if (CollisionDetection(&Irondhul_Ch, 0.f, -0.1f, /*level*/ g_unitMatrix, /*, npclist, npcCount*/, mapSizeHeight * mapSizeWidth, &window))
 				{
 					Irondhul.move(0.0f, -0.1f);
 				}
-				//Irondhul.move(0.0f, -0.1f);
 			}
 			//Irondhul.move(0.0f, -0.1f);
 		}
@@ -899,11 +931,15 @@ int main()
 		}
 		///////////////////
 
-		//window.draw(*chestList[1].shape);
 		//Draw chests
 		for (int i = 0; i < chestListSize; i++)
 		{
 			window.draw(*chestList[i].shape);
+		}
+		//Draw doors
+		for (int i = 0; i < doorListSize; i++)
+		{
+			window.draw(*doorList[i].shape);
 		}
 		//window.draw(*chestList[1].shape);
 		///////////////////

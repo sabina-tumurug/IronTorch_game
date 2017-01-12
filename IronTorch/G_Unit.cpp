@@ -12,6 +12,7 @@ G_Unit::G_Unit()
 
 	NPC = nullptr;
 	chest = nullptr;
+	door = nullptr;
 
 }
 
@@ -26,6 +27,7 @@ G_Unit::G_Unit(float newHeight, float newWidth, float newPosition_x, float newPo
 
 	NPC = nullptr;
 	chest = nullptr;
+	door = nullptr;
 }
 
 bool G_Unit::isColiding(float pos_x, float pos_y)
@@ -74,6 +76,12 @@ bool G_Unit::containsChest()
 {
 	if (chest == nullptr || chest == NULL) return false;
 	else return !chest->isEmpty;
+}
+
+bool G_Unit::containsOpenDoor()
+{
+	if (door == nullptr || door == NULL) return false;
+	else return door->isOpen;
 }
 
 G_Unit::~G_Unit()

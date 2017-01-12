@@ -2,6 +2,7 @@
 #include<string>
 #include "CharacterModel.h"
 #include "Chest.h"
+#include "Door.h"
 
 class G_Unit
 {
@@ -13,6 +14,7 @@ public:
 	std::string Path;
 	bool IsBackground;
 	Chest* chest;
+	Door* door;
 
 	G_Unit();
 	G_Unit(float newHeight, float newWidth, float newPosition_x, float newPosition_y, bool newIsBackground, std::string newPath);
@@ -25,6 +27,7 @@ public:
 	void setNPC(CharacterModel*);
 	void deleteNPC();
 	bool containsChest();
+	bool containsOpenDoor();
 
 	~G_Unit();
 };
