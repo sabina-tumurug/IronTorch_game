@@ -169,10 +169,14 @@
     <ClCompile Include="TileMap.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="battle-tileSet.png" />
     <Image Include="chest-close.png" />
     <Image Include="chest_open.png" />
     <Image Include="claw-marks.png" />
     <Image Include="death.png" />
+    <Image Include="door-closed.png" />
+    <Image Include="door-open.png" />
+    <Image Include="doors.png" />
     <Image Include="left.png" />
     <Image Include="right.png" />
     <Image Include="tileset.png" />

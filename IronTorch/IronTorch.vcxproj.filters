@@ -97,6 +97,18 @@
     <Image Include="chest-close.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="door-closed.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="door-open.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="doors.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="battle-tileSet.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="openal32.dll" />

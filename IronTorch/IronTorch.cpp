@@ -28,9 +28,14 @@ struct potionAction{
 	bool isAttack = false;
 };
 
+//Final BOSS:
+//void startBossBattle(sf::Window* window, CharacterModel* boss/*, CharacterModel *enemy*/, CharacterModel* character)
+//{
+//
+//}
 //Encoutered an enemy. Be ready to battleeeeeeeee
 //'Can put battleWindowFileName as a <declare>
-void battleStart(sf::RenderWindow* window, CharacterModel *enemy, CharacterModel* character)
+void battleStart(sf::RenderWindow* window, CharacterModel *enemy, CharacterModel* character, bool isBoss)
 {
 	//ifstream battleWin_File;
 	//battleWin_File.open(battleWindowFileName);
@@ -42,21 +47,29 @@ void battleStart(sf::RenderWindow* window, CharacterModel *enemy, CharacterModel
 	float oldChPos_X = character->shape->getPosition().x;
 	float oldChPos_Y = character->shape->getPosition().y;
 
-	int batlTileWidth = 60;
-	int batlTileHeight = 60;
+	int batlTileWidth = isBoss ? 128 : 60;
+	int batlTileHeight = isBoss ? 128 : 60;
 
-	int batlMapWidth = 20;
-	int batlMapWHeight = 10;
+	int batlMapWidth = isBoss ? 10 : 20;
+	int batlMapWHeight = isBoss ? 5 : 10;
 	character->loadToFile();
 	enemy->orientSpriteToLeft();
 
+	sf::Vector2f chPosition;
+	chPosition.x = isBoss ? (batlMapWidth / 4 + 1) * batlTileWidth : (batlMapWidth / 4 + 1) * batlTileWidth;
+	chPosition.y = isBoss ? (batlMapWHeight / 2) * batlTileHeight : (batlMapWHeight / 2 - 1) * batlTileHeight;
+
+	sf::Vector2f enemyPosition;
+	enemyPosition.x = isBoss ? (batlMapWidth - (batlMapWidth / 4 + 1)) * batlTileWidth : (batlMapWidth - (batlMapWidth / 4 + 1)) * batlTileWidth;
+	enemyPosition.y = isBoss ? (batlMapWHeight / 2) * batlTileHeight : (batlMapWHeight / 2 - 1) * batlTileHeight;
+
 	//x=6;y=4
-	character->shape->setPosition( (batlMapWidth / 4 + 1) * batlTileWidth, (batlMapWHeight / 2 - 1) * batlTileHeight);
-	enemy->shape->setPosition((batlMapWidth - (batlMapWidth / 4 + 1)) * batlTileWidth, (batlMapWHeight / 2 - 1) * batlTileHeight);
+	character->shape->setPosition(chPosition);
+	enemy->shape->setPosition(enemyPosition);
 
 	character->orientSpriteToRight();
 
-	const int battleLevel[] =
+	const int battleLevel[] = 
 	{
 		3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
 		3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
@@ -70,8 +83,20 @@ void battleStart(sf::RenderWindow* window, CharacterModel *enemy, CharacterModel
 		3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
 	};
 
+	const int bossBattleLevel[] =
+	{
+		2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+		1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+		2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+	};
+
+	const int *btlLvlPointer = isBoss ? bossBattleLevel : battleLevel;
+	std::string battleMapPath = isBoss ? "bossTileMap.png" : "battle-tileSet.png";
+
 	TileMap battleMap;
-	if (!battleMap.load("battle-tileSet.png", sf::Vector2u(batlTileWidth, batlTileHeight), battleLevel, batlMapWidth, batlMapWHeight))
+	if (!battleMap.load(battleMapPath, sf::Vector2u(batlTileWidth, batlTileHeight), btlLvlPointer, batlMapWidth, batlMapWHeight))
 		return;
 
 	//Stat windows
@@ -308,9 +333,11 @@ void battleStart(sf::RenderWindow* window, CharacterModel *enemy, CharacterModel
 			{
 				if (actionMatrix[i][j].text.getString() != "N/A")
 				{
-					sf::RectangleShape sh(sf::Vector2f(batlTileWidth * 2, batlTileHeight));
+					sf::RectangleShape sh(sf::Vector2f(/*batlTileWidth * 2, batlTileHeight*/120, 60));
 
-					sh.setPosition(/*(30.0f) + */(j * 2)* batlTileWidth, (batlMapWHeight - (3 - i)) * batlTileHeight);
+					//sh.setPosition(/*(30.0f) + */(j * 2)* batlTileWidth, (batlMapWHeight - (3 - i)) * batlTileHeight);
+					sh.setPosition(/*(30.0f) + */(j * 2)* 60, /*(batlMapWHeight * batlTileHeight) -*/ /*(batlMapWHeight - (3 - i)) * 60*/(batlMapWHeight * batlTileHeight) - 60 * (3 - i + isBoss));
+
 					actionMatrix[i][j].text.setPosition((sh.getPosition().x * 2 + sh.getSize().x) / 2, (sh.getPosition().y * 2 + sh.getSize().y) / 2);
 
 					//sh.setFillColor(sf::Color::Color(100, 100, 100*j, 100));
@@ -415,11 +442,9 @@ bool seeWhatIntersectsIntersects(CharacterModel* character, float point_X, float
 	{
 
 		OutputDebugString(L"It's a monster!!!");
-		//eliminateNPC(/*npcList2*/enList, /*npcList2Count*/enListCount, intersectingSprite.getNPC()->getID());
 
-		//delete npc from G_Unit
 		CharacterModel *enemy = intersectingSprite.getNPC();
-		battleStart(window, enemy/*, CharacterModel *enemy*/, character);
+		battleStart(window, enemy/*, CharacterModel *enemy*/, character, false);
 
 		intersectingSprite.deleteNPC();
 	}else
@@ -452,7 +477,21 @@ bool seeWhatIntersectsIntersects(CharacterModel* character, float point_X, float
 		else {
 			if (intersectingSprite.containsOpenDoor())
 			{
-				return true;
+				if (character->shape->getPosition().y < 50)
+				{
+					CharacterModel boss;
+					boss.name = "Death";
+					boss.setHP(50);
+					boss.setSpritePath_Left("death.png");
+					boss.setSpritePath_Right("death.png");
+					
+					sf::RectangleShape bossSh(sf::Vector2f(40.0f, 60.0f));
+					boss.shape = &bossSh;
+					boss.orientSpriteToLeft();
+					battleStart(window, &boss/*, CharacterModel *enemy*/, character, true);
+				}
+								return true;
+
 			}
 		}
 
@@ -599,9 +638,24 @@ int main()
 	//Giving Irondhul some potions
 	Potion p1 = Potion("Potion of Heath", 10, 0, 0, 0, 0);
 	Potion p2 = Potion("Potion of Strength", 0, 5, 0, 0, 0);
+	Potion p3 = Potion("Potion of Strength", 0, 5, 0, 0, 0);
+	Potion p4 = Potion("Potion of Strength", 0, 5, 0, 0, 0);
+	Potion p5 = Potion("Potion of Strength", 0, 5, 0, 0, 0);
+	Potion p6 = Potion("Potion of Strength", 0, 5, 0, 0, 0);
+	Potion p7 = Potion("Potion of Strength", 0, 5, 0, 0, 0);
+	Potion p8 = Potion("Potion of Strength", 0, 5, 0, 0, 0);
+	Potion p9 = Potion("Potion of Strength", 0, 5, 0, 0, 0);
+
+
 	Irondhul_Ch.addPotion(p1);
 	Irondhul_Ch.addPotion(p2);
-
+	Irondhul_Ch.addPotion(p3);
+	Irondhul_Ch.addPotion(p4);
+	Irondhul_Ch.addPotion(p5);
+	Irondhul_Ch.addPotion(p6);
+	Irondhul_Ch.addPotion(p7);
+	Irondhul_Ch.addPotion(p8);
+	Irondhul_Ch.addPotion(p9);
 
 	//Enemies
 	sf::RectangleShape vampire(sf::Vector2f(characterWidth, characterHeight));
