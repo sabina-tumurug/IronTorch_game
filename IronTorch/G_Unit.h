@@ -29,6 +29,7 @@ public:
 	bool containsChest();
 	bool containsOpenDoor();
 
+	void openDoor();
 	~G_Unit();
 };
 

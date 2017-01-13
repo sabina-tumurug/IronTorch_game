@@ -34,11 +34,6 @@ Chest::Chest(): id(currentId++)
 
 	shapeTexture_Open.loadFromFile("chest_open.png");
 	shapeTexture_Close.loadFromFile("chest-close.png");
-	//shape = &sf::RectangleShape();
-
-	/*shape->setTexture(shapeTexture_Close);
-	shape->setOrigin(shape->getLocalBounds().left + shape->getLocalBounds().width / 2.0f,
-		shape->getLocalBounds().top + shape->getLocalBounds().height / 2.0f);*/
 	isEmpty = false;
 }
 

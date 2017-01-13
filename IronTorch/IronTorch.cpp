@@ -12,8 +12,8 @@
 #include "Chest.h"
 #include "Door.h"
 
-//for debuging
 #include <Windows.h>
+
 //////////////
 using namespace std;
 int CharacterModel::currentId = 0;
@@ -23,27 +23,12 @@ int Door::currentId = 0;
 
 struct potionAction{
 	sf::Text text;
-	//text.setString("N\A");
 	Potion *potion;
 	bool isAttack = false;
 };
 
-//Final BOSS:
-//void startBossBattle(sf::Window* window, CharacterModel* boss/*, CharacterModel *enemy*/, CharacterModel* character)
-//{
-//
-//}
-//Encoutered an enemy. Be ready to battleeeeeeeee
-//'Can put battleWindowFileName as a <declare>
 void battleStart(sf::RenderWindow* window, CharacterModel *enemy, CharacterModel* character, bool isBoss)
 {
-	//ifstream battleWin_File;
-	//battleWin_File.open(battleWindowFileName);
-
-	//if (battleWin_File.is_open())
-	//{
-	//	battleWin_File.close();
-	//}
 	float oldChPos_X = character->shape->getPosition().x;
 	float oldChPos_Y = character->shape->getPosition().y;
 
@@ -121,33 +106,28 @@ void battleStart(sf::RenderWindow* window, CharacterModel *enemy, CharacterModel
 	text_enName.setPosition(window->getSize().x -200.0f, 0.0f);
 	//...
 	//Dmg animation
-	sf::Texture dmgTexture;//claw-marks.png
+	sf::Texture dmgTexture;
 	dmgTexture.loadFromFile("claw-marks.png");
-	//Irondhul.setTexture(&IrondhulTextureLeft);
 	sf::RectangleShape dmgShape;
 	dmgShape.setSize(sf::Vector2f(50.0f, 50.0f));
 	dmgShape.setOrigin(dmgShape.getLocalBounds().left + dmgShape.getLocalBounds().width / 2.0f,
 		dmgShape.getLocalBounds().top + dmgShape.getLocalBounds().height / 2.0f);
 	dmgShape.setTexture(&dmgTexture);
-	//dmgShape.setRotation(45.0f);
-	//dmgShape.setFillColor(sf::Color::Red);
 
 	//Show Attack and Potion list Text
-	/*string*/potionAction actionMatrix[3][3];
+	potionAction actionMatrix[3][3];
 	actionMatrix[0][0] = potionAction();
-	actionMatrix[0][0].text.setString("Attack");//"attack";
+	actionMatrix[0][0].text.setString("Attack");
 	actionMatrix[0][0].text.setCharacterSize(20);
 	actionMatrix[0][0].text.setFont(font);
 	actionMatrix[0][0].text.setPosition(30.0f, (batlMapWHeight - 3)* batlTileHeight);
 	actionMatrix[0][0].isAttack = true;
 
 	//Testing text Centering
-	//center text
 	sf::FloatRect textRect = actionMatrix[0][0].text.getLocalBounds();
 	actionMatrix[0][0].text.setOrigin(textRect.left + textRect.width / 2.0f,
 		textRect.top + textRect.height / 2.0f);
-	/*actionMatrix[0][0].text.setPosition(sf::Vector2f(SCRWIDTH / 2.0f, SCRHEIGHT / 2.0f))*/;
-	////////////////
+
 	int nrOfActions = 1;
 	for (int i = 0; i < 3; i++)
 	{
@@ -165,12 +145,10 @@ void battleStart(sf::RenderWindow* window, CharacterModel *enemy, CharacterModel
 					sf::FloatRect textRect = actionMatrix[i][j].text.getLocalBounds();
 					actionMatrix[i][j].text.setOrigin(textRect.left + textRect.width / 2.0f,
 						textRect.top + textRect.height / 2.0f);
-					//actionMatrix[i][j].text.setPosition((30.0f) + (j) * batlTileWidth, (batlMapWHeight - (3 - i)) * batlTileHeight);
 					nrOfActions++;
 				}
 				else
 					actionMatrix[i][j].text.setString("N/A");
-
 			}
 		}
 	}
@@ -190,16 +168,9 @@ void battleStart(sf::RenderWindow* window, CharacterModel *enemy, CharacterModel
 		{
 			//Attack
 			character->combat_defend(enemy->getAttack());
-			/*if (character->getHP() <= 0)
-			{
-				character->isDead = true;
-				battleIsOver = true;
-				break;
-			}*/
 			dmgDone = true;
 			dmgToCh = true;
 			isEnemyTurn = false;
-
 		}
 		while (window->pollEvent(event))
 		{
@@ -208,8 +179,6 @@ void battleStart(sf::RenderWindow* window, CharacterModel *enemy, CharacterModel
 			//Key events
 			if ((event.type == sf::Event::KeyPressed) && (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) ||
 				sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)))
-				/*if (event.key.code == sf::Keyboard::Key::A ||
-				event.key.code == sf::Keyboard::Key::Left)*/
 			{
 				if (actionPointer == 0)
 				{
@@ -219,8 +188,6 @@ void battleStart(sf::RenderWindow* window, CharacterModel *enemy, CharacterModel
 			}
 			if ((event.type == sf::Event::KeyPressed) && (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) ||
 				sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down)))
-				/*if (event.key.code == sf::Keyboard::Key::S ||
-				event.key.code == sf::Keyboard::Key::Down)*/
 			{
 				if (actionPointer < 3 * 3 - 3 && actionPointer + 3 <= nrOfActions)
 					actionPointer += 3;
@@ -228,8 +195,6 @@ void battleStart(sf::RenderWindow* window, CharacterModel *enemy, CharacterModel
 
 			if ((event.type == sf::Event::KeyPressed) && (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) ||
 				sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)))
-				/*if (event.key.code == sf::Keyboard::Key::D ||
-				event.key.code == sf::Keyboard::Key::Right)*/
 			{
 				if (actionPointer == nrOfActions - 1)
 				{
@@ -240,8 +205,6 @@ void battleStart(sf::RenderWindow* window, CharacterModel *enemy, CharacterModel
 			}
 			if ((event.type == sf::Event::KeyPressed) && (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) ||
 				sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up)))
-				/*if (event.key.code == sf::Keyboard::Key::W ||
-				event.key.code == sf::Keyboard::Key::Up)*/
 			{
 				if (actionPointer >= 3)
 				{
@@ -249,21 +212,12 @@ void battleStart(sf::RenderWindow* window, CharacterModel *enemy, CharacterModel
 				}
 			}
 			if ((event.type == sf::Event::KeyPressed) && (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Return)))
-				/*if (event.key.code == sf::Keyboard::Key::W ||
-				event.key.code == sf::Keyboard::Key::Up)*/
 			{
 				potionAction selectedAction = actionMatrix[actionPointer / 3][actionPointer % 3];
 				if (selectedAction.isAttack)
 				{
 					//Attack
 					enemy->combat_defend(character->getAttack());
-					/*if (enemy->getHP() <= 0)
-					{
-						enemy->isDead = true;
-						battleIsOver = true;
-						break;
-					}*/
-
 					dmgDone = true;
 					dmgToCh = false;
 					isEnemyTurn = true;
@@ -288,8 +242,6 @@ void battleStart(sf::RenderWindow* window, CharacterModel *enemy, CharacterModel
 									sf::FloatRect textRect = actionMatrix[i][j].text.getLocalBounds();
 									actionMatrix[i][j].text.setOrigin(textRect.left + textRect.width / 2.0f,
 										textRect.top + textRect.height / 2.0f);
-									//actionMatrix[i][j].text.setPosition((30.0f) + (j) * batlTileWidth, (batlMapWHeight - (3 - i)) * batlTileHeight);
-									//nrOfActions++;
 								}
 								else
 									actionMatrix[i][j].text.setString("N/A");
@@ -298,26 +250,13 @@ void battleStart(sf::RenderWindow* window, CharacterModel *enemy, CharacterModel
 					}
 					nrOfActions--;
 					if (actionPointer = nrOfActions) actionPointer = nrOfActions - 1;
-					//////////////////////////
 				}
 				//Redraw character UI
 				text_chName.setString(character->getStats());
 				text_enName.setString(enemy->getStats());
 			}
 			///end-Key events
-
 		}
-
-
-		/*sf::RectangleShape testShape(sf::Vector2f(20, 20));
-		testShape.setPosition(10, 10);
-		testShape.setFillColor(sf::Color::Green);*/
-
-
-
-		//double the proportions of the sprite
-		//character->loadToFile();
-		
 		window->clear();
 		
 		window->draw(battleMap);
@@ -335,13 +274,10 @@ void battleStart(sf::RenderWindow* window, CharacterModel *enemy, CharacterModel
 				{
 					sf::RectangleShape sh(sf::Vector2f(/*batlTileWidth * 2, batlTileHeight*/120, 60));
 
-					//sh.setPosition(/*(30.0f) + */(j * 2)* batlTileWidth, (batlMapWHeight - (3 - i)) * batlTileHeight);
-					sh.setPosition(/*(30.0f) + */(j * 2)* 60, /*(batlMapWHeight * batlTileHeight) -*/ /*(batlMapWHeight - (3 - i)) * 60*/(batlMapWHeight * batlTileHeight) - 60 * (3 - i + isBoss));
+					sh.setPosition((j * 2)* 60, (batlMapWHeight * batlTileHeight) - 60 * (3 - i + isBoss));
 
 					actionMatrix[i][j].text.setPosition((sh.getPosition().x * 2 + sh.getSize().x) / 2, (sh.getPosition().y * 2 + sh.getSize().y) / 2);
 
-					//sh.setFillColor(sf::Color::Color(100, 100, 100*j, 100));
-					//window->draw(sh);
 					if (actionPointer == i * 3 + j)
 					{
 						actionMatrix[i][j].text.setFillColor(sf::Color::Yellow);
@@ -356,24 +292,14 @@ void battleStart(sf::RenderWindow* window, CharacterModel *enemy, CharacterModel
 					}
 					window->draw(actionMatrix[i][j].text);
 				}
-				//sf::RectangleShape sh(sf::Vector2f(batlTileWidth * 2, batlTileHeight));
-				
-				
 			}
 				
 		}
-
 		//show damage animation
-
 		if (dmgDone)
 		{
 			sf::Vector2f position = dmgToCh ? sf::Vector2f((character->shape->getPosition().x * 2 + character->shape->getSize().x) / 2, (character->shape->getPosition().y * 2 + character->shape->getSize().y) / 2) 
 											: sf::Vector2f((enemy->shape->getPosition().x * 2 + enemy->shape->getSize().x) / 2, (enemy->shape->getPosition().y * 2 + enemy->shape->getSize().y) / 2);
-			/*sf::RectangleShape sh(sf::Vector2f(batlTileWidth * 2, batlTileHeight));
-
-			sh.setPosition((j * 2)* batlTileWidth, (batlMapWHeight - (3 - i)) * batlTileHeight);
-			actionMatrix[i][j].text.setPosition((sh.getPosition().x * 2 + sh.getSize().x) / 2, (sh.getPosition().y * 2 + sh.getSize().y) / 2); */
-			
 			if (dmgToCh)
 				dmgShape.setRotation(180.0f);
 
@@ -403,36 +329,15 @@ void battleStart(sf::RenderWindow* window, CharacterModel *enemy, CharacterModel
 					break;
 				}
 			}
-
-
 		}else
 		window->display();
-
-		/*int test = 0;
-
-		while (test < 10000)
-		{
-			test++;
-		}
-		break;*/
-
-
 	}
-
-	//VERY IMPORTANT!!!! 
-	//window->setKeyRepeatEnabled(true);
-	//character->loadFromFile("Character-" + std::to_string(character->getId()) + ".txt");
 	character->shape->setPosition(sf::Vector2f(oldChPos_X, oldChPos_Y));
 }
 
-//TODO: to be implemented with G_Unit
 bool seeWhatIntersectsIntersects(CharacterModel* character, float point_X, float point_Y, G_Unit gMatrix[200],int gMatrixLenght, sf::RenderWindow *window)
 {
-	//Get retangle
-	//*************
-	//TODO: to be replaced with G_Unit
 	sf::Vector2i vct = sf::Vector2i();
-
 	vct.x = point_X / 60;
 	vct.y = point_Y / 60;
 
@@ -440,11 +345,8 @@ bool seeWhatIntersectsIntersects(CharacterModel* character, float point_X, float
 
 	if (intersectingSprite.containsNPC())
 	{
-
-		OutputDebugString(L"It's a monster!!!");
-
 		CharacterModel *enemy = intersectingSprite.getNPC();
-		battleStart(window, enemy/*, CharacterModel *enemy*/, character, false);
+		battleStart(window, enemy, character, false);
 
 		intersectingSprite.deleteNPC();
 	}else
@@ -467,8 +369,7 @@ bool seeWhatIntersectsIntersects(CharacterModel* character, float point_X, float
 					{
 						if (gMatrix[d].door->isBossDoor)
 						{
-							//gMatrix[d].door->isOpen = true;
-							gMatrix[d].door->openDoor();
+							gMatrix[d].openDoor();
 						}
 					}
 				}
@@ -488,7 +389,7 @@ bool seeWhatIntersectsIntersects(CharacterModel* character, float point_X, float
 					sf::RectangleShape bossSh(sf::Vector2f(40.0f, 60.0f));
 					boss.shape = &bossSh;
 					boss.orientSpriteToLeft();
-					battleStart(window, &boss/*, CharacterModel *enemy*/, character, true);
+					battleStart(window, &boss, character, true);
 				}
 								return true;
 
@@ -497,28 +398,26 @@ bool seeWhatIntersectsIntersects(CharacterModel* character, float point_X, float
 
 	return intersectingSprite.IsBackground;
 }
-//levelG_UnitMap to be changed from int[] ~> G_Unit[]
 bool CollisionDetection(CharacterModel *character, float moveX, float moveY, G_Unit gMatrix[200], int gMatrixLenght, sf::RenderWindow *window)
 {
-	//sf::RectangleShape obj = character->shape;
 	bool token_result = false;
 	//get the new four corners of the sprite, and check if sprite it intersects is background or not
 	sf::Vector2f objPoz = character->shape->getPosition();
 	sf::Vector2f objSize = character->shape->getSize();
 	//1.Get upper left corner
-	token_result = seeWhatIntersectsIntersects(character, objPoz.x + moveX, objPoz.y + moveY, /*levelG_UnitMap*/gMatrix/*, enList, enListCount*/, gMatrixLenght, window);
+	token_result = seeWhatIntersectsIntersects(character, objPoz.x + moveX, objPoz.y + moveY, gMatrix, gMatrixLenght, window);
 	if (!token_result)
 		return false;
 	//2.Get upper right corner
-	token_result = seeWhatIntersectsIntersects(character, objPoz.x + moveX + objSize.x, objPoz.y + moveY, /*levelG_UnitMap*/gMatrix/*, enList, enListCount*/, gMatrixLenght, window);
+	token_result = seeWhatIntersectsIntersects(character, objPoz.x + moveX + objSize.x, objPoz.y + moveY, gMatrix, gMatrixLenght, window);
 	if (!token_result)
 		return false;
 	//3.Get lower left corner
-	token_result = seeWhatIntersectsIntersects(character, objPoz.x + moveX, objPoz.y + moveY + objSize.y, /*levelG_UnitMap*/gMatrix/*, enList, enListCount*/, gMatrixLenght, window);
+	token_result = seeWhatIntersectsIntersects(character, objPoz.x + moveX, objPoz.y + moveY + objSize.y, gMatrix, gMatrixLenght, window);
 	if (!token_result)
 		return false;
 	//4.Get lower right corner
-	token_result = seeWhatIntersectsIntersects(character, objPoz.x + moveX + objSize.x, objPoz.y + moveY + objSize.y, /*levelG_UnitMap*/gMatrix/*, enList, enListCount*/, gMatrixLenght, window);
+	token_result = seeWhatIntersectsIntersects(character, objPoz.x + moveX + objSize.x, objPoz.y + moveY + objSize.y, gMatrix, gMatrixLenght, window);
 	if (!token_result)
 		return false;
 
@@ -560,45 +459,18 @@ int main()
 {
 
 	//Window size
-	int windowWidth /*= 1200*/ = 1;
-	int windowHeight /*= 600*/ = 1;
-	//Experiment with map and fstream
-	map<string, string> windowMap;
-	ifstream mainWindowFile;
-	mainWindowFile.open("MAIN_WINDOW-properties.txt");
-	if (mainWindowFile.is_open())
-	{
-		string inLineStr;
-		while (getline(mainWindowFile, inLineStr))
-		{
-			std::size_t found = inLineStr.find('=');
-			if (found != std::string::npos)
-			{
-				string mapKey = inLineStr.substr(0, found);
-				string mapVal = inLineStr.substr(found + 1, inLineStr.size() - found);;
-				windowMap[mapKey] = mapVal;
-			}
-		}
-		string winHei = windowMap["height"];
-		string winWid = windowMap["width"];
-		windowHeight = std::stoi(winHei);
-		windowWidth = std::stoi(winWid);
-		mainWindowFile.close();
-	}
-	else
-		cout << "Unable to open main window properties file\n";
-
-	//////////////////////////////////
+	int windowWidth = 1200;
+	int windowHeight = 600;
+	
 	//Map tile size
 	int tileWidth = 60;
 	int tileHeight = 60;
+
 	//Character size
 	float characterWidth = 40;
-	//float characterHeight = 60;
-	//changed hight for testing
 	float characterHeight = 50;
 
-	//Map size (maybe DEFINE it as a CONSTANT
+	//Map size (maybe DEFINE it as a CONSTANT)
 	const int mapSizeHeight = 10;
 	const int mapSizeWidth = 20;
 
@@ -612,12 +484,12 @@ int main()
 	string bossTexture_path = "death.png";
 	
 	//Theme song
-	/*sf::Music music;
+	sf::Music music;
 	if (!music.openFromFile("theme_song.wav"))
 	return -1;
 	music.setLoop(true);
 	music.play();
-	music.setVolume(20);*/
+	music.setVolume(50);
 
 	sf::RenderWindow window(sf::VideoMode(windowWidth,windowHeight), "!!IronTorch!!");
 	
@@ -637,25 +509,17 @@ int main()
 
 	//Giving Irondhul some potions
 	Potion p1 = Potion("Potion of Heath", 10, 0, 0, 0, 0);
-	Potion p2 = Potion("Potion of Strength", 0, 5, 0, 0, 0);
-	Potion p3 = Potion("Potion of Strength", 0, 5, 0, 0, 0);
-	Potion p4 = Potion("Potion of Strength", 0, 5, 0, 0, 0);
-	Potion p5 = Potion("Potion of Strength", 0, 5, 0, 0, 0);
-	Potion p6 = Potion("Potion of Strength", 0, 5, 0, 0, 0);
-	Potion p7 = Potion("Potion of Strength", 0, 5, 0, 0, 0);
-	Potion p8 = Potion("Potion of Strength", 0, 5, 0, 0, 0);
-	Potion p9 = Potion("Potion of Strength", 0, 5, 0, 0, 0);
-
+	Potion p2 = Potion("Potion of Strength", 0, 7, 0, 0, 0);
+	Potion p3 = Potion("Potion of Inteligence", 0, 0, 7, 0, 0);
+	Potion p4 = Potion("Potion of Agility", 0, 0, 0, 7, 0);
+	Potion p5 = Potion("Potion of Endurance", 0, 0, 0, 0, 7);
 
 	Irondhul_Ch.addPotion(p1);
 	Irondhul_Ch.addPotion(p2);
 	Irondhul_Ch.addPotion(p3);
 	Irondhul_Ch.addPotion(p4);
 	Irondhul_Ch.addPotion(p5);
-	Irondhul_Ch.addPotion(p6);
-	Irondhul_Ch.addPotion(p7);
-	Irondhul_Ch.addPotion(p8);
-	Irondhul_Ch.addPotion(p9);
+	Irondhul_Ch.setHP(200);
 
 	//Enemies
 	sf::RectangleShape vampire(sf::Vector2f(characterWidth, characterHeight));
@@ -678,6 +542,11 @@ int main()
 	//zombie#1
 	CharacterModel z1 = CharacterModel("1","Zombie");
 	z1.setHP(15);
+	z1.strenght = 2;
+	z1.inteligence = 2;
+	z1.agility = 2;
+	z1.endurance = 2;
+
 	z1.shape = &zombie;
 	z1.shape->setPosition(sf::Vector2f(1150.0f, 120.0f));
 	z1.setSpritePath_Left("zombie(left).png");
@@ -687,6 +556,11 @@ int main()
 	//zombie#2
 	CharacterModel z2 = CharacterModel("2","Zombie");
 	z2.setHP(15);
+	z2.strenght = 2;
+	z2.inteligence = 2;
+	z2.agility = 2;
+	z2.endurance = 2;
+
 	z2.cloneShape(z1);
 	z2.setSpritePath_Left("zombie(left).png");
 	z2.setSpritePath_Right("zombie(right).png");
@@ -697,6 +571,11 @@ int main()
 	//zombie#3
 	CharacterModel z3 = CharacterModel("3","Zombie");
 	z3.setHP(15);
+	z3.strenght = 2;
+	z3.inteligence = 2;
+	z3.agility = 2;
+	z3.endurance = 2;
+
 	z3.cloneShape(z2);
 	z3.shape->setPosition(sf::Vector2f(130.0f, 240.0f));
 	z3.setSpritePath_Left("zombie(left).png");
@@ -706,6 +585,11 @@ int main()
 	//zombie#4
 	CharacterModel z4 = CharacterModel("4","Zombie");
 	z4.setHP(15);
+	z4.strenght = 2;
+	z4.inteligence = 2;
+	z4.agility = 2;
+	z4.endurance = 2;
+
 	z4.cloneShape(z3);
 	z4.shape->setPosition(sf::Vector2f(310.0f, 240.0f));
 	z4.setSpritePath_Left("zombie(left).png");
@@ -769,8 +653,6 @@ int main()
 		3, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,
 		2, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 	};
-	//dinamicly populate de matrix
-	//Chest chestList[10];
 
 	//Edit Chests
 	Chest chest1;
@@ -780,26 +662,17 @@ int main()
 	chestSh.setTexture(&chestTexture);
 	chestSh.setOrigin(chestSh.getLocalBounds().left + chestSh.getLocalBounds().width / 2.0f,
 		chestSh.getLocalBounds().top + chestSh.getLocalBounds().height / 2.0f);
-	//chestSh.setPosition(sf::Vector2f(7 * tileWidth + tileWidth / 2, 7 * tileHeight + tileHeight / 2)); 
-
 	chest1.shape = &chestSh;
-	
 
-	//chest1.addLoot();
 	Chest chest2;
 	chest2.cloneShape(chest1);
-	//chest2.shape->setPosition(sf::Vector2f(13 * tileWidth + tileWidth / 2, tileHeight * 5 + tileHeight / 2));
-
+	chest2.isPrimaryKey = true;
 
 	Chest chest3;
 	chest3.cloneShape(chest2);
-	//chest3.shape->setPosition(sf::Vector2f(0 * tileWidth + tileWidth / 2, tileHeight * 7 + tileHeight / 2)); 
-	//for testing
-	chest3.isPrimaryKey = true;
-	//////////////////
+
 	Chest chest4;
 	chest4.cloneShape(chest3);
-	//chest4.shape->setPosition(sf::Vector2f(0 * tileWidth + tileWidth / 2, tileHeight * 9 + tileHeight / 2));
 
 	Chest chestList[] =
 	{
@@ -811,7 +684,7 @@ int main()
 	for (int i = 0; i < chestListSize; i++)
 	{
 		Potion potion("Potion of health#" + to_string(i),
-			10,
+			20,
 			0,
 			0,
 			0,
@@ -821,7 +694,7 @@ int main()
 	}
 	chestList[0].loot.at(0).name = "Potion Extra";
 	int chestCursor = 0;
-	////////////////////////////////////////////////////////
+
 	//Edit doors
 	Door door1;
 	sf::RectangleShape doorShape(sf::Vector2f(tileWidth, tileHeight));
@@ -831,12 +704,11 @@ int main()
 	doorShape.setOrigin(doorShape.getLocalBounds().left + doorShape.getLocalBounds().width / 2.0f,
 		doorShape.getLocalBounds().top + doorShape.getLocalBounds().height / 2.0f);
 	door1.shape = &doorShape;
-	//testing 
 	door1.isBossDoor = true;
-	////////////////
+
 	Door door2;
 	door2.cloneShape(door1);
-	//chest2.shape->setPosition(sf::Vector2f(13 * tileWidth + tileWidth / 2, tileHeight * 5 + tileHeight / 2));
+	door2.isBossDoor = false;
 
 	Door doorList[] =
 	{
@@ -846,14 +718,14 @@ int main()
 	int doorListSize = 2;
 	int doorListCursor = 0;
 
-	/////////////////////////
+	//kind of nasty, but I need to keep it
+	G_Unit* enDoor;
+	///////
 	for(int i = 0; i < mapSizeHeight; i++)
 		for (int j = 0; j < mapSizeWidth; j++)
 		{
 			int spriteType = level[j + (i * mapSizeWidth)];
-			G_Unit newG;// = G_Unit();
-			//Chest chest;
-
+			G_Unit newG;
 			switch (spriteType)
 			{
 				//0 = WALL
@@ -883,6 +755,9 @@ int main()
 					newG = G_Unit(tileHeight, tileWidth, j * tileWidth, i * tileHeight, false, "");
 					doorList[doorListCursor].shape->setPosition(j * tileWidth + tileWidth / 2, i * tileHeight + tileHeight / 2);
 					newG.door = &doorList[doorListCursor];
+					if (!newG.door->isBossDoor)
+						enDoor = &newG;
+					//newG.door->gUnit = &newG;
 					doorListCursor++;
 
 					break;
@@ -894,22 +769,20 @@ int main()
 		}
 
 	//Map NPC to npc G_unit
-	for (int i = 0; i < npcCount/*npcList2Count*/; i++)
+	for (int i = 0; i < npcCount; i++)
 	{
 		sf::Vector2i vct = sf::Vector2i();
 
 		vct.x = npclist[i].shape->getPosition().x / 60;
 		vct.y = npclist[i].shape->getPosition().y / 60;
 
-		g_unitMatrix[vct.x + (vct.y * 20)].setNPC(&npclist[i]/*&npcList2[i]*/);
+		g_unitMatrix[vct.x + (vct.y * 20)].setNPC(&npclist[i]);
 	}
-
-
 
 	TileMap map;
 	if (!map.load("tileset.png", sf::Vector2u(tileWidth, tileHeight), level, mapSizeWidth, mapSizeHeight))
 		return -1;
-	/////////////////////////////////////////////////////////////////////////////////
+
 
 	while (window.isOpen())
 	{
@@ -923,19 +796,15 @@ int main()
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) ||
 			sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
 		{
-			//battleStart(&window, "battle-tileSet.png");
 			if (allowMovement(Irondhul, -0.1f, 0.0f, windowWidth, windowHeight))
 			{
-				if (CollisionDetection(&Irondhul_Ch, -0.1f, 0.0f, /*level*/ g_unitMatrix/*, npclist, npcCount*/, mapSizeHeight * mapSizeWidth, &window))
+				if (CollisionDetection(&Irondhul_Ch, -0.1f, 0.0f, g_unitMatrix, mapSizeHeight * mapSizeWidth, &window))
 				{
 					Irondhul.move(-0.1f, 0.0f);
 					Irondhul.setTexture(&IrondhulTextureLeft);
 				}
 				
 			}
-
-			/*Irondhul.move(-0.1f, 0.0f);
-			Irondhul.setTexture(&IrondhulTextureLeft);*/
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) ||
 			sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down))
@@ -946,7 +815,6 @@ int main()
 				{
 					Irondhul.move(0.0f, 0.1f);
 				}
-				
 			}
 		}
 			
@@ -962,8 +830,6 @@ int main()
 				}
 				
 			}
-			/*Irondhul.move(0.1f, 0.0f);
-			Irondhul.setTexture(&IrondhulTextureRight);*/
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) ||
 			sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))
@@ -975,19 +841,24 @@ int main()
 					Irondhul.move(0.0f, -0.1f);
 				}
 			}
-			//Irondhul.move(0.0f, -0.1f);
 		}
-		///////////////////////////////////////////////////////
 
 		window.clear();
 		window.draw(map);
 
-		for (int en = 0; en < /*npcList2Count*/npcCount; en++)
+		//Draw Enemies
+		int deadEnemies = 0;
+		for (int en = 0; en < npcCount; en++)
 		{
 			if(!npclist[en].isDead)
-			window.draw(*/*npcList2*/npclist[en].shape);
+			window.draw(*npclist[en].shape);
+			else deadEnemies++;
 		}
-		///////////////////
+			if (deadEnemies == npcCount)
+			{
+				//door2.openDoor();.
+				enDoor->openDoor();
+			}
 
 		//Draw chests
 		for (int i = 0; i < chestListSize; i++)
@@ -999,7 +870,6 @@ int main()
 		{
 			window.draw(*doorList[i].shape);
 		}
-		///////////////////
 		window.draw(Irondhul);
 		window.display();
 	}

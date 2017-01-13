@@ -10,6 +10,8 @@ public:
 	static int currentId;
 	sf::RectangleShape* shape;
 
+	//G_Unit* gUnit;
+
 	bool isBossDoor;
 
 	bool isOpen;

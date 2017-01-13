@@ -16,6 +16,12 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
+    <Text Include="BATTLE_WINDOW-properties.txt" />
+    <Text Include="FONTLOG.txt" />
+    <Text Include="OFL.txt" />
+    <Text Include="MainCharacter_Irondhul.txt" />
+    <Text Include="MAIN_Character-properties.txt" />
+    <Text Include="Character-0.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -109,9 +115,13 @@
     <Image Include="battle-tileSet.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="bossTileMap.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="openal32.dll" />
+    <None Include="dancing_script.zip" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="boss_song.wav">

@@ -12,6 +12,7 @@ void Door::openDoor()
 {
 	shape->setTexture(&shapeTexture_Open);
 	isOpen = true;
+	//gUnit->IsBackground = true;
 }
 
 int Door::getId()

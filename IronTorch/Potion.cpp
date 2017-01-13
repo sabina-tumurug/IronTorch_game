@@ -1,9 +1,5 @@
 #include "Potion.h"
 
-/*
-effectAttack, effectDefence;
-int effectStrenght, effectAgility, effectInteligence, effectEndurance;
-*/
 Potion::Potion() : id(current_id++)
 {
 }

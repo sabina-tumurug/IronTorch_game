@@ -446,30 +446,19 @@ void CharacterModel::loadToFile()
 }
 
 void CharacterModel::orientSpriteToLeft()
-{/*
-	sf::Texture textureLeft;
-	textureLeft.loadFromFile(spritePath_left);*/
-
+{
 	shape->setTexture(&spriteTexture_left);
 }
 
 void CharacterModel::orientSpriteToRight()
 {
-	//sf::Texture textureRight;
-	//textureRight.loadFromFile(spritePath_right);
-	//sf::Texture ex1 = *spriteTexture_right;
-
 	shape->setTexture(&spriteTexture_right);
 }
 
 void CharacterModel::setSpritePath_Left(std::string const val)
 {
 	spritePath_left = val;
-	//sf::Texture ex;
-	//ex.loadFromFile(val);
 	spriteTexture_left.loadFromFile(val);
-	//spriteTexture_left = &ex;
-
 }
 
 std::string CharacterModel::getSpritePath_Left()
@@ -480,11 +469,7 @@ std::string CharacterModel::getSpritePath_Left()
 void CharacterModel::setSpritePath_Right(std::string const val)
 {
 	spritePath_right = val;
-	//spriteTexture_right->loadFromFile(val);
-	//sf::Texture ex;
-	//ex.loadFromFile(val);
 	spriteTexture_right.loadFromFile(val);
-	//spriteTexture_right = ex;
 }
 
 std::string CharacterModel::getSpritePath_Right()
@@ -505,9 +490,6 @@ std::string CharacterModel::getStats()
 	stream.str(std::string());
 	stream << std::fixed << std::setprecision(2) << defence;
 	result += "Defence: " + stream.str() + "\n";
-	//result += "Attack: " + std::to_string(std::setprecision(attack,2)  ) + "\n";
-	//result += "Defence: " + std::to_string(defence) + "\n";
-
 
 	return result;
 }
