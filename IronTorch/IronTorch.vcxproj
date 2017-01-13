@@ -151,19 +151,50 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CharacterModel.h" />
+    <ClInclude Include="Chest.h" />
+    <ClInclude Include="Door.h" />
     <ClInclude Include="G_Unit.h" />
+    <ClInclude Include="Potion.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="TileMap.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CharacterModel.cpp" />
+    <ClCompile Include="Chest.cpp" />
+    <ClCompile Include="Door.cpp" />
     <ClCompile Include="G_Unit.cpp" />
     <ClCompile Include="IronTorch.cpp" />
+    <ClCompile Include="Potion.cpp" />
+    <ClCompile Include="TileMap.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="battle-tileSet.png" />
+    <Image Include="chest-close.png" />
+    <Image Include="chest_open.png" />
+    <Image Include="claw-marks.png" />
+    <Image Include="death.png" />
+    <Image Include="door-closed.png" />
+    <Image Include="door-open.png" />
+    <Image Include="doors.png" />
     <Image Include="left.png" />
     <Image Include="right.png" />
+    <Image Include="tileset.png" />
+    <Image Include="vampire(left).png" />
+    <Image Include="vampire(right).png" />
+    <Image Include="zombie(left).png" />
+    <Image Include="zombie(right).png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="openal32.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="boss_song.wav" />
+    <Media Include="theme_song.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="DancingScript-Bold.ttf" />
+    <Font Include="DancingScript-Regular.ttf" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
