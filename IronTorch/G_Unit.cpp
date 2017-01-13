@@ -84,6 +84,13 @@ bool G_Unit::containsOpenDoor()
 	else return door->isOpen;
 }
 
+void G_Unit::openDoor()
+{
+	if (door != nullptr || door != NULL)
+		door->openDoor();
+		IsBackground = true;
+}
+
 G_Unit::~G_Unit()
 {
 }

@@ -9,14 +9,9 @@
 class CharacterModel
 {
 private:
-	//HP = Strenght & Endurance
 	int hp;
-	//Attack = Strenght & Inteligence
-	//Defence = Agility & Endurance
 	float attack, defence;
-	int strenght, agility, inteligence, endurance;
 
-	//std::string ID;
 	int id;
 	void incrStrenght(int);
 	void incrAgility(int);
@@ -32,6 +27,8 @@ private:
 
 public:
 	std::string name;
+	int strenght, agility, inteligence, endurance;
+
 	std::vector<Potion>  potionList;
 	int potionList_Size;
 	sf::RectangleShape* shape;
@@ -43,8 +40,8 @@ public:
 
 
 
-	CharacterModel(std::string id, std::string name); /*: id(current_id++) {}*/
-	CharacterModel()/*:id(current_id++) {}*/;
+	CharacterModel(std::string id, std::string name); 
+	CharacterModel();
 	int getId();
 
 	int getHP();
@@ -76,5 +73,4 @@ public:
 	//DELETE FILES WHEN DECONSTRUCTING
 	~CharacterModel();
 };
-//int CharacterModel::currentId = 0;
 

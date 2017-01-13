@@ -148,6 +148,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <Text Include="BATTLE_WINDOW-properties.txt" />
+    <Text Include="Character-0.txt" />
+    <Text Include="FONTLOG.txt" />
+    <Text Include="MainCharacter_Irondhul.txt" />
+    <Text Include="MAIN_Character-properties.txt" />
+    <Text Include="OFL.txt" />
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
@@ -170,6 +176,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="battle-tileSet.png" />
+    <Image Include="bossTileMap.png" />
     <Image Include="chest-close.png" />
     <Image Include="chest_open.png" />
     <Image Include="claw-marks.png" />
@@ -186,6 +193,7 @@
     <Image Include="zombie(right).png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="dancing_script.zip" />
     <None Include="openal32.dll" />
   </ItemGroup>
   <ItemGroup>

@@ -8,11 +8,9 @@ public:
 	int id;
 	int effectHP;
 	int effectStrenght, effectAgility, effectInteligence, effectEndurance;
-	static int current_id; // added
-
-						   //patient() : id(current_id++) {} // added
-	Potion();/* : id(current_id++) {}*/
-	Potion(std::string); /*: id(current_id++) {}*/
-	Potion(std::string, int, int, int, int, int); /*: id(current_id++) {}*/
+	static int current_id; 
+	Potion();
+	Potion(std::string); 
+	Potion(std::string, int, int, int, int, int);
 	~Potion();
 };
